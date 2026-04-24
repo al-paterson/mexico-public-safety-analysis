@@ -46,6 +46,35 @@ vs_national = pd.read_sql("""
     ORDER BY i.year
 """, conn, params=[QRO])
 
+rising = pd.read_sql("""
+    SELECT
+        a.crime_type,
+        COALESCE(b.incidents_2015, 0) AS incidents_2015,
+        a.incidents_2024,
+        ROUND(
+            (a.incidents_2024 - COALESCE(b.incidents_2015, 0)) * 100.0
+            / NULLIF(COALESCE(b.incidents_2015, 0), 0),
+            1
+        ) AS pct_change
+    FROM (
+        SELECT i.crime_type, SUM(i.incidents) AS incidents_2024
+        FROM incidents i
+        INNER JOIN state_lookup s ON i.state_code = s.state_code
+        WHERE s.state_name = ? AND i.year = 2024
+        GROUP BY i.crime_type
+    ) a
+    LEFT JOIN (
+        SELECT i.crime_type, SUM(i.incidents) AS incidents_2015
+        FROM incidents i
+        INNER JOIN state_lookup s ON i.state_code = s.state_code
+        WHERE s.state_name = ? AND i.year = 2015
+        GROUP BY i.crime_type
+    ) b ON a.crime_type = b.crime_type
+    WHERE b.incidents_2015 > 0
+    ORDER BY pct_change DESC
+    LIMIT 5
+""", conn, params=[QRO, QRO])
+
 conn.close()
 
 # ── derived stats ─────────────────────────────────────────────────────────────
@@ -151,6 +180,17 @@ In 2025, the state recorded {int(latest["qro_total"]):,} incidents versus a nati
 
 This gap has remained stable over the decade, suggesting Querétaro's relative safety
 position has not deteriorated despite absolute growth in incident counts.
+
+---
+
+## 5. Fastest Rising Crime Types (2015 vs 2024)
+
+| Crime Type | 2015 | 2024 | % Change |
+|------------|-----:|-----:|---------:|
+{"".join(f"| {r['crime_type']} | {int(r['incidents_2015']):,} | {int(r['incidents_2024']):,} | +{float(r['pct_change']):,.1f}% |{chr(10)}" for _, r in rising.iterrows())}
+The steepest rise is in **{rising.iloc[0]["crime_type"]}**, up {float(rising.iloc[0]["pct_change"]):,.0f}% from
+{int(rising.iloc[0]["incidents_2015"]):,} incidents in 2015 to {int(rising.iloc[0]["incidents_2024"]):,} in 2024.
+This likely reflects both improved reporting and real increases in gender-based violence.
 
 ---
 

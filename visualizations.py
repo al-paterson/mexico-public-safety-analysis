@@ -52,8 +52,6 @@ vs_national = pd.read_sql("""
     ORDER BY i.year
 """, conn, params=[QRO])
 
-conn.close()
-
 # 2026 is partial data (Jan–Feb only) — drop from trend charts
 yearly = yearly[yearly["year"] <= 2025]
 vs_national = vs_national[vs_national["year"] <= 2025]
@@ -145,3 +143,52 @@ plt.tight_layout()
 plt.savefig("output/charts/chart4_vs_national.png", dpi=150)
 plt.close()
 print("Saved chart4_vs_national.png")
+
+# ── Chart 5: Fastest rising crime types 2015 vs 2024 (horizontal bar) ────────
+
+rising = pd.read_sql("""
+    SELECT
+        a.crime_type,
+        COALESCE(b.incidents_2015, 0) AS incidents_2015,
+        a.incidents_2024,
+        ROUND(
+            (a.incidents_2024 - COALESCE(b.incidents_2015, 0)) * 100.0
+            / NULLIF(COALESCE(b.incidents_2015, 0), 0),
+            1
+        ) AS pct_change
+    FROM (
+        SELECT i.crime_type, SUM(i.incidents) AS incidents_2024
+        FROM incidents i
+        INNER JOIN state_lookup s ON i.state_code = s.state_code
+        WHERE s.state_name = ? AND i.year = 2024
+        GROUP BY i.crime_type
+    ) a
+    LEFT JOIN (
+        SELECT i.crime_type, SUM(i.incidents) AS incidents_2015
+        FROM incidents i
+        INNER JOIN state_lookup s ON i.state_code = s.state_code
+        WHERE s.state_name = ? AND i.year = 2015
+        GROUP BY i.crime_type
+    ) b ON a.crime_type = b.crime_type
+    WHERE b.incidents_2015 > 0
+    ORDER BY pct_change DESC
+    LIMIT 8
+""", conn, params=[QRO, QRO])
+
+labels = [t[:35] + "…" if len(t) > 35 else t for t in rising["crime_type"]]
+
+fig, ax = plt.subplots(figsize=(11, 6))
+ax.barh(labels[::-1], rising["pct_change"][::-1], color="#2563EB")
+
+ax.set_title("Fastest Rising Crime Types in Querétaro (2015 vs 2024)", fontsize=14, fontweight="bold", pad=14)
+ax.set_xlabel("% Change")
+ax.xaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: f"{int(x):,}%"))
+ax.spines[["top", "right"]].set_visible(False)
+ax.grid(axis="x", linestyle="--", alpha=0.4)
+
+plt.tight_layout()
+plt.savefig("output/charts/chart5_rising_crimes.png", dpi=150)
+plt.close()
+print("Saved chart5_rising_crimes.png")
+
+conn.close()

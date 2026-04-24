@@ -94,6 +94,22 @@ position has not deteriorated despite absolute growth in incident counts.
 
 ---
 
+## 5. Fastest Rising Crime Types (2015 vs 2024)
+
+| Crime Type | 2015 | 2024 | % Change |
+|------------|-----:|-----:|---------:|
+| Violencia de género en todas sus modalidades distinta a la violencia familiar | 2 | 1,469 | +73,350.0% |
+| Extorsión | 6 | 236 | +3,833.3% |
+| Acoso sexual | 23 | 761 | +3,208.7% |
+| Violación equiparada | 29 | 255 | +779.3% |
+| Otros delitos que atentan contra la libertad personal | 33 | 277 | +739.4% |
+
+The steepest rise is in **Violencia de género en todas sus modalidades distinta a la violencia familiar**, up 73,350% from
+2 incidents in 2015 to 1,469 in 2024.
+This likely reflects both improved reporting and real increases in gender-based violence.
+
+---
+
 ## Methodology
 
 - Data downloaded directly from datos.gob.mx (SESNSP official release, February 2026)

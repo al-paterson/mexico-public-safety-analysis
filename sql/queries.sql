@@ -53,3 +53,35 @@ INNER JOIN state_lookup s ON i.state_code = s.state_code
 WHERE s.state_name = 'Querétaro'
 GROUP BY i.year
 ORDER BY i.year;
+
+
+-- Query 5: Fastest rising crime types in Querétaro (2015 vs 2024)
+-- Business question: Which crime categories have grown the most over the decade?
+-- Uses LEFT JOIN so types that appeared after 2015 still surface (with 0 as baseline)
+
+SELECT
+    a.crime_type,
+    COALESCE(b.incidents_2015, 0) AS incidents_2015,
+    a.incidents_2024,
+    ROUND(
+        (a.incidents_2024 - COALESCE(b.incidents_2015, 0)) * 100.0
+        / NULLIF(COALESCE(b.incidents_2015, 0), 0),
+        1
+    ) AS pct_change
+FROM (
+    SELECT i.crime_type, SUM(i.incidents) AS incidents_2024
+    FROM incidents i
+    INNER JOIN state_lookup s ON i.state_code = s.state_code
+    WHERE s.state_name = 'Querétaro' AND i.year = 2024
+    GROUP BY i.crime_type
+) a
+LEFT JOIN (
+    SELECT i.crime_type, SUM(i.incidents) AS incidents_2015
+    FROM incidents i
+    INNER JOIN state_lookup s ON i.state_code = s.state_code
+    WHERE s.state_name = 'Querétaro' AND i.year = 2015
+    GROUP BY i.crime_type
+) b ON a.crime_type = b.crime_type
+WHERE b.incidents_2015 > 0
+ORDER BY pct_change DESC
+LIMIT 10;

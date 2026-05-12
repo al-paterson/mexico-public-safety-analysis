@@ -1,16 +1,16 @@
 import pandas as pd
 import os
 
+RAW_HIST = "data/raw/Estatal-Delitos-2015-2025_feb2026.csv"
+RAW_2026 = "data/raw/RNID-Delitos_Estatal-2026-feb2026.csv"
+CLEANED_OUT = "data/cleaned/incidents_long.csv"
+RAW_ENCODING = "latin-1"
+
 os.makedirs("data/cleaned", exist_ok=True)
 
-df_hist = pd.read_csv(
-    "data/raw/Estatal-Delitos-2015-2025_feb2026.csv",
-    encoding="latin-1"
-)
-df_2026 = pd.read_csv(
-    "data/raw/RNID-Delitos_Estatal-2026-feb2026.csv",
-    encoding="latin-1"
-)
+df_hist = pd.read_csv(RAW_HIST, encoding=RAW_ENCODING)
+
+df_2026 = pd.read_csv(RAW_2026, encoding=RAW_ENCODING)
 
 df = pd.concat([df_hist, df_2026], ignore_index=True)
 
@@ -39,5 +39,5 @@ month_map = {
 }
 df_long['month'] = df_long['month'].map(month_map)
 
-df_long.to_csv("data/cleaned/incidents_long.csv", index=False)
+df_long.to_csv(CLEANED_OUT, index=False)
 print(f"Cleaned data saved: {len(df_long):,} rows")

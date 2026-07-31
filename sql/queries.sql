@@ -64,7 +64,9 @@ ORDER BY i.year;
 
 -- Query 5: Fastest rising crime types in Querétaro (2015 vs 2024)
 -- Business question: Which crime categories have grown the most over the decade?
--- Uses LEFT JOIN so types that appeared after 2015 still surface (with 0 as baseline)
+-- Uses INNER JOIN (via the incidents_2015 > 0 filter) because a % change needs a
+-- nonzero 2015 baseline. Categories created after 2015 are excluded deliberately,
+-- since "up infinity percent from zero" is not a meaningful comparison
 
 SELECT
     a.crime_type,
@@ -92,3 +94,104 @@ LEFT JOIN (
 WHERE b.incidents_2015 > 0
 ORDER BY pct_change DESC
 LIMIT 10;
+
+
+-- Query 6: Querétaro incidents per 100,000 inhabitants by year
+-- Business question: Once population growth is stripped out, is crime actually rising?
+-- Three-table JOIN: incidents need the state name (state_lookup) AND the matching
+-- year's population (population). The rate is meaningless without both
+
+SELECT
+    i.year,
+    SUM(i.incidents) AS total_incidents,
+    p.population,
+    ROUND(SUM(i.incidents) * 100000.0 / p.population, 1) AS rate_per_100k
+FROM incidents i
+INNER JOIN state_lookup s ON i.state_code = s.state_code
+INNER JOIN population p ON i.state_code = p.state_code AND i.year = p.year  -- match state AND year
+WHERE s.state_name = 'Querétaro'
+  AND i.year <= 2025                -- 2026 is a partial year (Jan-Feb only)
+GROUP BY i.year, p.population
+ORDER BY i.year;
+
+
+-- Query 7: Querétaro rate vs the true national rate, by year
+-- Business question: Is Querétaro safer than the country as a whole, per capita?
+-- The national rate here is population-weighted (all incidents / all people),
+-- which fixes the earlier unweighted "average per state" comparison that
+-- treated Colima (700k people) the same as Estado de México (17M)
+
+SELECT
+    q.year,
+    q.rate_per_100k AS qro_rate,
+    n.rate_per_100k AS national_rate
+FROM (
+    -- Querétaro's yearly rate
+    SELECT i.year, ROUND(SUM(i.incidents) * 100000.0 / p.population, 1) AS rate_per_100k
+    FROM incidents i
+    INNER JOIN population p ON i.state_code = p.state_code AND i.year = p.year
+    WHERE i.state_code = 22 AND i.year <= 2025
+    GROUP BY i.year, p.population
+) q
+INNER JOIN (
+    -- national yearly rate: total incidents over total population
+    SELECT i.year, ROUND(SUM(i.incidents) * 100000.0 / MAX(t.national_pop), 1) AS rate_per_100k
+    FROM incidents i
+    INNER JOIN (
+        SELECT year, SUM(population) AS national_pop
+        FROM population
+        GROUP BY year
+    ) t ON i.year = t.year
+    WHERE i.year <= 2025
+    GROUP BY i.year
+) n ON q.year = n.year
+ORDER BY q.year;
+
+
+-- Query 8: All 32 states ranked by incidents per 100,000 inhabitants (2025)
+-- Business question: Where does Querétaro actually rank once state size is controlled for?
+
+SELECT
+    s.state_name,
+    SUM(i.incidents) AS total_incidents,
+    p.population,
+    ROUND(SUM(i.incidents) * 100000.0 / p.population, 1) AS rate_per_100k
+FROM incidents i
+INNER JOIN state_lookup s ON i.state_code = s.state_code
+INNER JOIN population p ON i.state_code = p.state_code AND i.year = p.year
+WHERE i.year = 2025                 -- latest complete year
+GROUP BY s.state_name, p.population
+ORDER BY rate_per_100k DESC;
+
+
+-- Query 9: Population growth vs change in crime rate, per state (2015 -> 2025)
+-- Business question: Do fast-growing states pay for their growth with more crime per person?
+-- Two subqueries build each state's 2015 and 2025 snapshots (incidents + population),
+-- INNER JOINed on state_code because every state exists in both years
+
+SELECT
+    s.state_name,
+    ROUND((b.population - a.population) * 100.0 / a.population, 1) AS pop_growth_pct,
+    ROUND(a.rate_per_100k, 1) AS rate_2015,
+    ROUND(b.rate_per_100k, 1) AS rate_2025,
+    ROUND((b.rate_per_100k - a.rate_per_100k) * 100.0 / a.rate_per_100k, 1) AS rate_change_pct
+FROM (
+    -- 2015 snapshot: incidents, population, and rate per state
+    SELECT i.state_code, p.population,
+           SUM(i.incidents) * 100000.0 / p.population AS rate_per_100k
+    FROM incidents i
+    INNER JOIN population p ON i.state_code = p.state_code AND i.year = p.year
+    WHERE i.year = 2015
+    GROUP BY i.state_code, p.population
+) a
+INNER JOIN (
+    -- 2025 snapshot: same shape as the 2015 subquery
+    SELECT i.state_code, p.population,
+           SUM(i.incidents) * 100000.0 / p.population AS rate_per_100k
+    FROM incidents i
+    INNER JOIN population p ON i.state_code = p.state_code AND i.year = p.year
+    WHERE i.year = 2025
+    GROUP BY i.state_code, p.population
+) b ON a.state_code = b.state_code
+INNER JOIN state_lookup s ON a.state_code = s.state_code
+ORDER BY pop_growth_pct DESC;

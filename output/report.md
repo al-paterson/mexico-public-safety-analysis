@@ -1,43 +1,52 @@
 # Public Safety Analysis: Querétaro, Mexico
-**Data source:** Secretariado Ejecutivo del Sistema Nacional de Seguridad Pública (SESNSP)
+**Data sources:** SESNSP reported incidents; CONAPO mid-year population
 **Period:** 2015–2025
-**Built by:** generate_report.py, April 24, 2026
+**Built by:** generate_report.py, July 04, 2026
 
 ---
 
 ## Executive Summary
 
-Reported crime incidents in Querétaro increased **72.3%** between 2015 and 2025,
-rising from 32,817 to 56,559 annual incidents. Despite this growth, Querétaro
-has remained consistently **below the national per-state average** every year in the dataset,
-with an average gap of 7,982 fewer incidents per year than the typical Mexican state.
+Raw reported incidents in Querétaro grew **72.3%** between 2015 and 2025
+(32,817 → 56,559). But the state's population grew **26.0%** over the
+same window, so the per-capita picture is very different: incidents per 100,000
+inhabitants rose **36.8%** (1,558 → 2,131). Roughly half
+of the headline growth was simply more people.
 
-The peak year was **2023** (63,334 incidents),
-followed by a COVID-era dip in 2020 and a partial recovery through 2023 before declining again
-toward 2025.
+Most of the per-capita rise is one step in 2016: monthly reports went from about
+2,800 (January to May) to about 4,100 (June to December) and stayed
+there. A jump that sudden may be a change in how crimes were recorded rather than a crime
+wave; I can't tell which from this data. From 2017 to 2025 the rate fell **10.8%**.
+
+The more uncomfortable finding: measured per capita, Querétaro has been **above the
+national rate every single year**, on average 44.3% higher, and ranked
+**#9 of 32 states** in reported incidents per 100k in 2025. An earlier version
+of this analysis compared raw counts against a per-state average and concluded the
+opposite; normalizing by population reverses the conclusion.
 
 ---
 
 ## 1. Year-over-Year Trend
 
-| Year | Querétaro | National Avg per State |
-|------|----------:|----------------------:|
-| 2015 | 32,817 | 51,806 |
-| 2016 | 42,900 | 55,130 |
-| 2017 | 53,379 | 60,609 |
-| 2018 | 57,809 | 62,185 |
-| 2019 | 60,515 | 64,724 |
-| 2020 | 52,026 | 57,537 |
-| 2021 | 53,944 | 63,882 |
-| 2022 | 58,676 | 66,937 |
-| 2023 | 63,334 | 67,922 |
-| 2024 | 59,371 | 65,380 |
-| 2025 | 56,559 | 63,020 |
+| Year | Incidents | Qro per 100k | National per 100k |
+|------|----------:|-------------:|------------------:|
+| 2015 | 32,817 | 1,557.8 | 1,354.8 |
+| 2016 | 42,900 | 1,978.0 | 1,427.5 |
+| 2017 | 53,379 | 2,389.8 | 1,554.4 |
+| 2018 | 57,809 | 2,514.5 | 1,579.4 |
+| 2019 | 60,515 | 2,559.2 | 1,628.1 |
+| 2020 | 52,026 | 2,150.0 | 1,436.1 |
+| 2021 | 53,944 | 2,190.5 | 1,584.9 |
+| 2022 | 58,676 | 2,339.4 | 1,648.2 |
+| 2023 | 63,334 | 2,476.0 | 1,657.5 |
+| 2024 | 59,371 | 2,277.6 | 1,581.7 |
+| 2025 | 56,559 | 2,130.7 | 1,512.1 |
 
 **Key observations:**
-- Incidents grew every year from 2015 to 2019, reaching 60,515 in 2019.
-- A sharp drop in 2020 (–14.0%) aligns with COVID-19 lockdowns reducing activity and reporting.
-- The state has trended downward since 2023, ending 2025 at 56,559 incidents.
+- Both raw counts and the per-capita rate peaked around 2019 and again in 2023.
+- The 2020 drop (COVID-19 lockdowns) appears in both Querétaro and the national rate.
+- The per-capita rate has declined since 2023 while population keeps growing. That is the
+  most positive trend in the data.
 
 ---
 
@@ -83,14 +92,27 @@ suggesting crime in Querétaro is driven more by structural factors than seasona
 
 ---
 
-## 4. Querétaro vs National Average
+## 4. Where Querétaro Ranks Nationally (2025, per 100k)
 
-Querétaro consistently reports **fewer incidents than the national per-state average**.
-In 2025, the state recorded 56,559 incidents versus a national average of
-63,020, a gap of 6,461 incidents.
+| Rank | State | Incidents per 100k |
+|-----:|-------|-------------------:|
+| 1 | Colima | 3,495.5 |
+| 2 | Baja California Sur | 2,736.6 |
+| 3 | Quintana Roo | 2,657.1 |
+| 4 | Guanajuato | 2,546.5 |
+| 5 | Aguascalientes | 2,536.3 |
+| 6 | Ciudad de México | 2,290.8 |
+| 7 | Baja California | 2,225.2 |
+| 8 | Morelos | 2,210.5 |
+| 9 | Querétaro | 2,130.7 | ←
+| 10 | Coahuila | 2,033.6 |
 
-This gap has remained stable over the decade, suggesting Querétaro's relative safety
-position has not deteriorated despite absolute growth in incident counts.
+Two caveats matter when reading this table. First, these are **reported** incidents:
+states at the bottom of the ranking (Guerrero, Chiapas) are not a list of the safest
+states in Mexico. Part of what the ranking measures is where people don't report.
+Second, a state's rate can jump when it changes how it records crimes, not only when
+crime changes. The ranking measures the interaction of crime and reporting behavior,
+not crime alone.
 
 ---
 
@@ -106,16 +128,18 @@ position has not deteriorated despite absolute growth in incident counts.
 
 The steepest rise is in **Violencia de género en todas sus modalidades distinta a la violencia familiar**, up 73,350% from
 2 incidents in 2015 to 1,469 in 2024.
-This likely reflects both improved reporting and real increases in gender-based violence.
+The 2015 baseline is tiny, so this percentage mostly reflects changes in legal
+classification and reporting practice rather than an equivalent rise in actual events.
 
 ---
 
 ## Methodology
 
-- Data downloaded directly from datos.gob.mx (SESNSP official release, February 2026)
+- Crime data downloaded from datos.gob.mx (SESNSP official release, February 2026)
+- Population denominators from CONAPO mid-year population (estimates reconciled with the censuses to 2019, projections from 2020)
 - Raw CSVs cleaned in Python/pandas: Spanish headers translated, wide format reshaped to long
-- Analysis performed via SQLite with INNER JOINs against a state lookup table
-- National average calculated as total national incidents ÷ 32 states per year
+- Analysis performed via SQLite; per-capita queries JOIN incidents to population on state AND year
+- National rate is population-weighted: total national incidents ÷ total national population
 - 2026 excluded from trend analysis (partial year: January–February only)
 - Charts exported to `output/charts/` via matplotlib
 

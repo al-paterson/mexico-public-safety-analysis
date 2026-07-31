@@ -5,15 +5,43 @@ from datetime import date
 conn = sqlite3.connect("data/mexico_safety.db")
 QRO = "Querétaro"
 
+# yearly totals and rate per 100k for Querétaro
 yearly = pd.read_sql("""
-    SELECT i.year, SUM(i.incidents) AS total_incidents
+    SELECT i.year,
+           SUM(i.incidents) AS total_incidents,
+           p.population,
+           ROUND(SUM(i.incidents) * 100000.0 / p.population, 1) AS rate_per_100k
     FROM incidents i
     INNER JOIN state_lookup s ON i.state_code = s.state_code
+    INNER JOIN population p ON i.state_code = p.state_code AND i.year = p.year
     WHERE s.state_name = ? AND i.year <= 2025
-    GROUP BY i.year
+    GROUP BY i.year, p.population
     ORDER BY i.year
 """, conn, params=[QRO])
 
+# monthly totals for 2016, to show the jump in the middle of the year
+months_2016 = pd.read_sql("""
+    SELECT i.month, SUM(i.incidents) AS total_incidents
+    FROM incidents i
+    INNER JOIN state_lookup s ON i.state_code = s.state_code
+    WHERE s.state_name = ? AND i.year = 2016
+    GROUP BY i.month
+""", conn, params=[QRO])
+
+# national rate: all incidents over all people, not an average of the state rates
+national = pd.read_sql("""
+    SELECT i.year,
+           ROUND(SUM(i.incidents) * 100000.0 / MAX(t.national_pop), 1) AS national_rate
+    FROM incidents i
+    INNER JOIN (
+        SELECT year, SUM(population) AS national_pop FROM population GROUP BY year
+    ) t ON i.year = t.year
+    WHERE i.year <= 2025
+    GROUP BY i.year
+    ORDER BY i.year
+""", conn)
+
+# top crime categories, all years combined
 top_crimes = pd.read_sql("""
     SELECT i.crime_type, SUM(i.incidents) AS total_incidents
     FROM incidents i
@@ -24,6 +52,7 @@ top_crimes = pd.read_sql("""
     LIMIT 5
 """, conn, params=[QRO])
 
+# incidents per day by month, 2015-2025 (per day because February is short)
 monthly = pd.read_sql("""
     SELECT i.month,
            SUM(i.incidents) * 1.0 / CASE
@@ -37,19 +66,19 @@ monthly = pd.read_sql("""
     ORDER BY i.month
 """, conn, params=[QRO])
 
-vs_national = pd.read_sql("""
-    SELECT
-        i.year,
-        SUM(i.incidents) AS qro_total,
-        ROUND((SELECT SUM(incidents) / 32.0 FROM incidents WHERE year = i.year), 2)
-            AS national_avg_per_state
+# all 32 states ranked by 2025 rate, used for Querétaro's national rank
+ranking = pd.read_sql("""
+    SELECT s.state_name,
+           ROUND(SUM(i.incidents) * 100000.0 / p.population, 1) AS rate_per_100k
     FROM incidents i
     INNER JOIN state_lookup s ON i.state_code = s.state_code
-    WHERE s.state_name = ? AND i.year <= 2025
-    GROUP BY i.year
-    ORDER BY i.year
-""", conn, params=[QRO])
+    INNER JOIN population p ON i.state_code = p.state_code AND i.year = p.year
+    WHERE i.year = 2025
+    GROUP BY s.state_name, p.population
+    ORDER BY rate_per_100k DESC
+""", conn)
 
+# fastest rising crime types (nonzero 2015 baseline required for a % change)
 rising = pd.read_sql("""
     SELECT
         a.crime_type,
@@ -83,12 +112,39 @@ conn.close()
 
 # derived stats
 
-peak_year = yearly.loc[yearly["total_incidents"].idxmax()]
-low_year  = yearly.loc[yearly["total_incidents"].idxmin()]
+# one row per year with both rates
+rates = yearly.merge(national, on="year")
 
+peak_year = yearly.loc[yearly["total_incidents"].idxmax()]
+
+# raw counts: 2015 vs 2025
 inc_2015 = int(yearly[yearly["year"] == 2015]["total_incidents"].iloc[0])
 inc_2025 = int(yearly[yearly["year"] == 2025]["total_incidents"].iloc[0])
-pct_change = round((inc_2025 - inc_2015) / inc_2015 * 100, 1)
+pct_change_raw = round((inc_2025 - inc_2015) / inc_2015 * 100, 1)
+
+# same comparison, per capita
+rate_2015 = float(yearly[yearly["year"] == 2015]["rate_per_100k"].iloc[0])
+rate_2025 = float(yearly[yearly["year"] == 2025]["rate_per_100k"].iloc[0])
+pct_change_rate = round((rate_2025 - rate_2015) / rate_2015 * 100, 1)
+
+# most of that rise is one step in mid-2016, so also measure from 2017
+rate_2017 = float(yearly[yearly["year"] == 2017]["rate_per_100k"].iloc[0])
+drop_since_2017 = round((rate_2017 - rate_2025) / rate_2017 * 100, 1)
+before_step = months_2016[months_2016["month"] <= 5]["total_incidents"].mean()
+after_step = months_2016[months_2016["month"] >= 6]["total_incidents"].mean()
+
+# population growth over the same window
+pop_2015 = int(yearly[yearly["year"] == 2015]["population"].iloc[0])
+pop_2025 = int(yearly[yearly["year"] == 2025]["population"].iloc[0])
+pop_growth = round((pop_2025 - pop_2015) / pop_2015 * 100, 1)
+
+# Querétaro's national rank in 2025 (1 = highest rate)
+qro_rank = int(ranking.reset_index(drop=True)
+               .query("state_name == @QRO").index[0]) + 1
+
+# how far above the national rate Querétaro sits, on average
+avg_rate_gap_pct = round(((rates["rate_per_100k"] / rates["national_rate"]) - 1)
+                         .mean() * 100, 1)
 
 peak_month_row = monthly.loc[monthly["per_day"].idxmax()]
 low_month_row  = monthly.loc[monthly["per_day"].idxmin()]
@@ -101,10 +157,6 @@ low_month  = month_names[int(low_month_row["month"])]
 top1 = top_crimes.iloc[0]
 top2 = top_crimes.iloc[1]
 
-avg_gap = (vs_national["national_avg_per_state"] - vs_national["qro_total"]).mean()
-latest = vs_national[vs_national["year"] == 2025].iloc[0]
-gap_2025 = int(latest["national_avg_per_state"] - latest["qro_total"])
-
 # build markdown
 
 MONTH_TABLE = "\n".join(
@@ -113,12 +165,19 @@ MONTH_TABLE = "\n".join(
 )
 
 YEARLY_TABLE = "\n".join(
-    f"| {int(r.year)} | {int(r.total_incidents):,} | {int(r2.national_avg_per_state):,} |"
-    for (_, r), (_, r2) in zip(yearly.iterrows(), vs_national.iterrows())
+    f"| {int(r.year)} | {int(r.total_incidents):,} | {r.rate_per_100k:,.1f} | {r.national_rate:,.1f} |"
+    for _, r in rates.iterrows()
+)
+
+RANKING_TABLE = "\n".join(
+    f"| {i + 1} | {r.state_name} | {r.rate_per_100k:,.1f} |"
+    + (" ←" if r.state_name == QRO else "")
+    for i, r in ranking.reset_index(drop=True).iterrows()
+    if i < 10 or r.state_name == QRO   # top 10 plus Querétaro's own row
 )
 
 report = f"""# Public Safety Analysis: Querétaro, Mexico
-**Data source:** Secretariado Ejecutivo del Sistema Nacional de Seguridad Pública (SESNSP)
+**Data sources:** SESNSP reported incidents; CONAPO mid-year population
 **Period:** 2015–2025
 **Built by:** generate_report.py, {date.today().strftime("%B %d, %Y")}
 
@@ -126,27 +185,36 @@ report = f"""# Public Safety Analysis: Querétaro, Mexico
 
 ## Executive Summary
 
-Reported crime incidents in Querétaro increased **{pct_change}%** between 2015 and 2025,
-rising from {inc_2015:,} to {inc_2025:,} annual incidents. Despite this growth, Querétaro
-has remained consistently **below the national per-state average** every year in the dataset,
-with an average gap of {int(avg_gap):,} fewer incidents per year than the typical Mexican state.
+Raw reported incidents in Querétaro grew **{pct_change_raw}%** between 2015 and 2025
+({inc_2015:,} → {inc_2025:,}). But the state's population grew **{pop_growth}%** over the
+same window, so the per-capita picture is very different: incidents per 100,000
+inhabitants rose **{pct_change_rate}%** ({rate_2015:,.0f} → {rate_2025:,.0f}). Roughly half
+of the headline growth was simply more people.
 
-The peak year was **{int(peak_year["year"])}** ({int(peak_year["total_incidents"]):,} incidents),
-followed by a COVID-era dip in 2020 and a partial recovery through 2023 before declining again
-toward 2025.
+Most of the per-capita rise is one step in 2016: monthly reports went from about
+{round(before_step, -2):,.0f} (January to May) to about {round(after_step, -2):,.0f} (June to December) and stayed
+there. A jump that sudden may be a change in how crimes were recorded rather than a crime
+wave; I can't tell which from this data. From 2017 to 2025 the rate fell **{drop_since_2017}%**.
+
+The more uncomfortable finding: measured per capita, Querétaro has been **above the
+national rate every single year**, on average {avg_rate_gap_pct}% higher, and ranked
+**#{qro_rank} of 32 states** in reported incidents per 100k in 2025. An earlier version
+of this analysis compared raw counts against a per-state average and concluded the
+opposite; normalizing by population reverses the conclusion.
 
 ---
 
 ## 1. Year-over-Year Trend
 
-| Year | Querétaro | National Avg per State |
-|------|----------:|----------------------:|
+| Year | Incidents | Qro per 100k | National per 100k |
+|------|----------:|-------------:|------------------:|
 {YEARLY_TABLE}
 
 **Key observations:**
-- Incidents grew every year from 2015 to 2019, reaching {int(yearly[yearly['year']==2019]['total_incidents'].iloc[0]):,} in 2019.
-- A sharp drop in 2020 (–{round((1 - int(yearly[yearly['year']==2020]['total_incidents'].iloc[0]) / int(yearly[yearly['year']==2019]['total_incidents'].iloc[0]))*100,1)}%) aligns with COVID-19 lockdowns reducing activity and reporting.
-- The state has trended downward since 2023, ending 2025 at {inc_2025:,} incidents.
+- Both raw counts and the per-capita rate peaked around 2019 and again in 2023.
+- The 2020 drop (COVID-19 lockdowns) appears in both Querétaro and the national rate.
+- The per-capita rate has declined since 2023 while population keeps growing. That is the
+  most positive trend in the data.
 
 ---
 
@@ -176,14 +244,18 @@ suggesting crime in Querétaro is driven more by structural factors than seasona
 
 ---
 
-## 4. Querétaro vs National Average
+## 4. Where Querétaro Ranks Nationally (2025, per 100k)
 
-Querétaro consistently reports **fewer incidents than the national per-state average**.
-In 2025, the state recorded {int(latest["qro_total"]):,} incidents versus a national average of
-{int(latest["national_avg_per_state"]):,}, a gap of {gap_2025:,} incidents.
+| Rank | State | Incidents per 100k |
+|-----:|-------|-------------------:|
+{RANKING_TABLE}
 
-This gap has remained stable over the decade, suggesting Querétaro's relative safety
-position has not deteriorated despite absolute growth in incident counts.
+Two caveats matter when reading this table. First, these are **reported** incidents:
+states at the bottom of the ranking (Guerrero, Chiapas) are not a list of the safest
+states in Mexico. Part of what the ranking measures is where people don't report.
+Second, a state's rate can jump when it changes how it records crimes, not only when
+crime changes. The ranking measures the interaction of crime and reporting behavior,
+not crime alone.
 
 ---
 
@@ -194,16 +266,18 @@ position has not deteriorated despite absolute growth in incident counts.
 {"".join(f"| {r['crime_type']} | {int(r['incidents_2015']):,} | {int(r['incidents_2024']):,} | +{float(r['pct_change']):,.1f}% |{chr(10)}" for _, r in rising.iterrows())}
 The steepest rise is in **{rising.iloc[0]["crime_type"]}**, up {float(rising.iloc[0]["pct_change"]):,.0f}% from
 {int(rising.iloc[0]["incidents_2015"]):,} incidents in 2015 to {int(rising.iloc[0]["incidents_2024"]):,} in 2024.
-This likely reflects both improved reporting and real increases in gender-based violence.
+The 2015 baseline is tiny, so this percentage mostly reflects changes in legal
+classification and reporting practice rather than an equivalent rise in actual events.
 
 ---
 
 ## Methodology
 
-- Data downloaded directly from datos.gob.mx (SESNSP official release, February 2026)
+- Crime data downloaded from datos.gob.mx (SESNSP official release, February 2026)
+- Population denominators from CONAPO mid-year population (estimates reconciled with the censuses to 2019, projections from 2020)
 - Raw CSVs cleaned in Python/pandas: Spanish headers translated, wide format reshaped to long
-- Analysis performed via SQLite with INNER JOINs against a state lookup table
-- National average calculated as total national incidents ÷ 32 states per year
+- Analysis performed via SQLite; per-capita queries JOIN incidents to population on state AND year
+- National rate is population-weighted: total national incidents ÷ total national population
 - 2026 excluded from trend analysis (partial year: January–February only)
 - Charts exported to `output/charts/` via matplotlib
 

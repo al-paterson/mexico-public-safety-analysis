@@ -6,6 +6,11 @@ conn = sqlite3.connect("data/mexico_safety.db")
 df = pd.read_csv("data/cleaned/incidents_long.csv")
 df.to_sql("incidents", conn, if_exists="replace", index=False)
 
+# population is the denominator for the per-capita rates
+population = pd.read_csv("data/cleaned/population.csv")
+population.to_sql("population", conn, if_exists="replace", index=False)
+
+# state code -> name + region, so queries can filter by name
 state_lookup = pd.DataFrame([
     (1, 'Aguascalientes', 'North'), (2, 'Baja California', 'North'),
     (3, 'Baja California Sur', 'North'), (4, 'Campeche', 'South'),
@@ -28,4 +33,4 @@ state_lookup = pd.DataFrame([
 state_lookup.to_sql("state_lookup", conn, if_exists="replace", index=False)
 
 conn.close()
-print("Database loaded.")
+print("Database loaded: incidents, population, state_lookup.")

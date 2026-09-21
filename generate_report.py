@@ -220,14 +220,11 @@ opposite; normalizing by population reverses the conclusion.
 
 ## 2. Crime Type Breakdown
 
-The top five crime categories account for the majority of all reported incidents:
-
 | Crime Type | Total Incidents (2015–2025) |
 |------------|----------------------------:|
 {"".join(f"| {r.crime_type} | {int(r.total_incidents):,} |{chr(10)}" for _, r in top_crimes.iterrows())}
 **{top1["crime_type"]}** is the single largest category by a wide margin, followed by
-**{top2["crime_type"]}**. These two categories together represent the bulk of reported crime
-and should be the focus of any targeted intervention analysis.
+**{top2["crime_type"]}**. Together they are the bulk of all reported incidents.
 
 ---
 
@@ -240,7 +237,7 @@ and should be the focus of any targeted intervention analysis.
 **{peak_month}** has the most incidents per day ({peak_month_row["per_day"]:.1f}) and **{low_month}** the fewest
 ({low_month_row["per_day"]:.1f}), counted per day because February is shorter than the other months.
 The seasonal variation is moderate, a gap of about {round((peak_month_row["per_day"] - low_month_row["per_day"]) / low_month_row["per_day"] * 100, 1)}% between peak and trough,
-suggesting crime in Querétaro is driven more by structural factors than seasonal ones.
+so seasonality is not a major driver here.
 
 ---
 

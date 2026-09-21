@@ -52,8 +52,6 @@ opposite; normalizing by population reverses the conclusion.
 
 ## 2. Crime Type Breakdown
 
-The top five crime categories account for the majority of all reported incidents:
-
 | Crime Type | Total Incidents (2015–2025) |
 |------------|----------------------------:|
 | Robo | 252,721 |
@@ -63,8 +61,7 @@ The top five crime categories account for the majority of all reported incidents
 | Violencia familiar | 36,720 |
 
 **Robo** is the single largest category by a wide margin, followed by
-**Lesiones**. These two categories together represent the bulk of reported crime
-and should be the focus of any targeted intervention analysis.
+**Lesiones**. Together they are the bulk of all reported incidents.
 
 ---
 
@@ -88,7 +85,7 @@ and should be the focus of any targeted intervention analysis.
 **October** has the most incidents per day (153.6) and **January** the fewest
 (137.6), counted per day because February is shorter than the other months.
 The seasonal variation is moderate, a gap of about 11.6% between peak and trough,
-suggesting crime in Querétaro is driven more by structural factors than seasonal ones.
+so seasonality is not a major driver here.
 
 ---
 

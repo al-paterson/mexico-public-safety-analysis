@@ -1,0 +1,366 @@
+{
+    "dataRoles": [
+        {
+            "displayName": "Value",
+            "name": "value",
+            "kind": "Measure"
+        },
+        {
+            "displayName": "Comparison",
+            "name": "comparison",
+            "kind": "Measure"
+        }
+    ],
+    "dataViewMappings": [
+        {
+            "conditions": [
+                {
+                    "value": {
+                        "max": 1
+                    },
+                    "comparison": {
+                        "max": 1
+                    }
+                }
+            ],
+            "categorical": {
+                "values": {
+                    "select": [
+                        {
+                            "bind": {
+                                "to": "value"
+                            }
+                        },
+                        {
+                            "bind": {
+                                "to": "comparison"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "objects": {
+        "panel": {
+            "displayName": "Panel",
+            "properties": {
+                "mode": {
+                    "displayName": "Mode",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Card",
+                                "value": "card"
+                            },
+                            {
+                                "displayName": "Panel",
+                                "value": "panel"
+                            },
+                            {
+                                "displayName": "Header",
+                                "value": "header"
+                            },
+                            {
+                                "displayName": "Backboard",
+                                "value": "backboard"
+                            },
+                            {
+                                "displayName": "Sidebar",
+                                "value": "sidebar"
+                            }
+                        ]
+                    }
+                },
+                "fill": {
+                    "displayName": "Fill color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "radius": {
+                    "displayName": "Corner radius",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "borderShow": {
+                    "displayName": "Border",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "borderColor": {
+                    "displayName": "Border color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "titleText": {
+            "displayName": "Title",
+            "properties": {
+                "show": {
+                    "displayName": "Show",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "text": {
+                    "displayName": "Text",
+                    "type": {
+                        "text": true
+                    }
+                },
+                "subtitle": {
+                    "displayName": "Subtitle",
+                    "type": {
+                        "text": true
+                    }
+                },
+                "fontSize": {
+                    "displayName": "Text size",
+                    "type": {
+                        "formatting": {
+                            "fontSize": true
+                        }
+                    }
+                },
+                "color": {
+                    "displayName": "Color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "subtitleColor": {
+                    "displayName": "Subtitle color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "icon": {
+            "displayName": "Icon",
+            "properties": {
+                "show": {
+                    "displayName": "Show",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "name": {
+                    "displayName": "Icon",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Chart",
+                                "value": "chart"
+                            },
+                            {
+                                "displayName": "Bar chart",
+                                "value": "bar"
+                            },
+                            {
+                                "displayName": "Pie",
+                                "value": "pie"
+                            },
+                            {
+                                "displayName": "Percent",
+                                "value": "percent"
+                            },
+                            {
+                                "displayName": "People",
+                                "value": "people"
+                            },
+                            {
+                                "displayName": "Map pin",
+                                "value": "pin"
+                            },
+                            {
+                                "displayName": "Shield",
+                                "value": "shield"
+                            },
+                            {
+                                "displayName": "Table",
+                                "value": "table"
+                            },
+                            {
+                                "displayName": "Box",
+                                "value": "box"
+                            },
+                            {
+                                "displayName": "Sigma",
+                                "value": "sigma"
+                            },
+                            {
+                                "displayName": "Trending Up",
+                                "value": "trending-up"
+                            },
+                            {
+                                "displayName": "Trending Down",
+                                "value": "trending-down"
+                            },
+                            {
+                                "displayName": "Users",
+                                "value": "users"
+                            },
+                            {
+                                "displayName": "Layers",
+                                "value": "layers"
+                            },
+                            {
+                                "displayName": "Map pin (Lucide)",
+                                "value": "map-pin"
+                            },
+                            {
+                                "displayName": "Map",
+                                "value": "map"
+                            },
+                            {
+                                "displayName": "Shield (Material)",
+                                "value": "shield-m"
+                            },
+                            {
+                                "displayName": "Location (Material)",
+                                "value": "pin-m"
+                            },
+                            {
+                                "displayName": "Activity",
+                                "value": "activity"
+                            },
+                            {
+                                "displayName": "Bar chart (horizontal)",
+                                "value": "chart-bar"
+                            },
+                            {
+                                "displayName": "Column chart",
+                                "value": "chart-column"
+                            },
+                            {
+                                "displayName": "Pie chart",
+                                "value": "chart-pie"
+                            }
+                        ]
+                    }
+                },
+                "size": {
+                    "displayName": "Size",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "color": {
+                    "displayName": "Color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "value": {
+            "displayName": "Value (card)",
+            "properties": {
+                "label": {
+                    "displayName": "Label",
+                    "type": {
+                        "text": true
+                    }
+                },
+                "fontSize": {
+                    "displayName": "Value size",
+                    "type": {
+                        "formatting": {
+                            "fontSize": true
+                        }
+                    }
+                },
+                "color": {
+                    "displayName": "Value color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "labelColor": {
+                    "displayName": "Label color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "precision": {
+                    "displayName": "Decimals",
+                    "type": {
+                        "numeric": true
+                    }
+                }
+            }
+        },
+        "pill": {
+            "displayName": "Trend pill",
+            "properties": {
+                "show": {
+                    "displayName": "Show",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "goodColor": {
+                    "displayName": "Good color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "badColor": {
+                    "displayName": "Bad color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "invert": {
+                    "displayName": "Invert (down is good)",
+                    "type": {
+                        "bool": true
+                    }
+                }
+            }
+        }
+    },
+    "privileges": []
+}

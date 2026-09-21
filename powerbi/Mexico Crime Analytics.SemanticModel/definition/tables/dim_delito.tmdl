@@ -1,0 +1,157 @@
+table dim_delito
+	lineageTag: 85e65c96-b56d-5cc5-92f2-c159c1fb932f
+
+	column delito_key
+		dataType: int64
+		isHidden
+		lineageTag: 8aed4ba0-952f-5ac8-a1dc-c402c0531f58
+		summarizeBy: none
+		sourceColumn: delito_key
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Nivel mas alto de la clasificacion SESNSP: que se protege, no que se hizo.
+	column 'Bien juridico afectado'
+		dataType: string
+		lineageTag: b951fe90-9da0-5855-8027-28561da9f0cb
+		summarizeBy: none
+		sourceColumn: bien_juridico
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo de delito'
+		dataType: string
+		lineageTag: 02aa5ddf-7c45-50c5-bbab-aae1ff19d504
+		summarizeBy: none
+		sourceColumn: tipo_delito
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Subtipo de delito'
+		dataType: string
+		lineageTag: 0e4fad24-8c29-5bdf-960a-08d802004aea
+		summarizeBy: none
+		sourceColumn: subtipo_delito
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Nivel mas fino. Distingue por ejemplo robo con violencia de robo sin violencia.
+	column Modalidad
+		dataType: string
+		lineageTag: d852b190-6dcd-54db-9a42-6246fc8aefdd
+		summarizeBy: none
+		sourceColumn: modalidad
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Tipo corto con espacios finos (U+200A) al final para que todas las etiquetas midan lo mismo en Segoe UI;
+	/// asi el eje, que alinea a la derecha, queda alineado a la izquierda. Generado con pad_labels.py.
+	column 'Tipo eje' =
+			VAR n =
+				SWITCH(
+				dim_delito[Tipo corto],
+				"Robo", 70,
+				"Rapto", 68,
+				"Aborto", 65,
+				"Fraude", 65,
+				"Incesto", 64,
+				"Despojo", 60,
+				"Lesiones", 60,
+				"Falsedad", 59,
+				"Extorsión", 57,
+				"Secuestro", 55,
+				"Amenazas", 54,
+				"Homicidio", 54,
+				"Electorales", 52,
+				"Feminicidio", 50,
+				"Falsificación", 48,
+				"Acoso sexual", 45,
+				"Abuso sexual", 44,
+				"Otros libertad", 42,
+				"Otros sociedad", 37,
+				"Narcomenudeo", 36,
+				"Violación simple", 33,
+				"Violencia familiar", 31,
+				"Otros patrimonio", 30,
+				"Evasión de presos", 28,
+				"Trata de personas", 28,
+				"Pensión alimenticia", 23,
+				"Servidores públicos", 23,
+				"Tráfico de menores", 23,
+				"Abuso de confianza", 22,
+				"Otros contra la vida", 22,
+				"Violencia de género", 21,
+				"Daño a la propiedad", 19,
+				"Otros (fuero común)", 19,
+				"Violación equiparada", 17,
+				"Hostigamiento sexual", 15,
+				"Otros delitos sexuales", 15,
+				"Otros contra la familia", 14,
+				"Corrupción de menores", 8,
+				"Allanamiento de morada", 5,
+				0
+				)
+			RETURN dim_delito[Tipo corto] & REPT(UNICHAR(8202), n)
+		dataType: string
+		lineageTag: fa8df9e7-b1fd-42d3-af0a-939bfc29cf5f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Nombre corto del tipo historico para etiquetas; los largos se abrevian.
+	column 'Tipo corto' =
+			SWITCH(
+			    dim_delito[Tipo historico],
+			    "Incumplimiento de obligaciones de asistencia familiar", "Pensión alimenticia",
+			    "Otros delitos que atentan contra la libertad personal", "Otros libertad",
+			    "Delitos cometidos por servidores públicos", "Servidores públicos",
+			    "Otros delitos contra el patrimonio", "Otros patrimonio",
+			    "Otros delitos contra la familia", "Otros contra la familia",
+			    "Otros delitos del Fuero Común", "Otros (fuero común)",
+			    "Violencia de género en todas sus modalidades distinta a la violencia familiar", "Violencia de género",
+			    "Otros delitos que atentan contra la libertad y la seguridad sexual", "Otros delitos sexuales",
+			    "Otros delitos que atentan contra la vida y la integridad corporal", "Otros contra la vida",
+			    "Otros delitos contra la sociedad", "Otros sociedad",
+			    dim_delito[Tipo historico]
+			)
+		dataType: string
+		lineageTag: a7840fd6-539f-477f-a975-81e8a68a569f
+
+	/// Tipo de delito en la clasificacion 2015-2025. Las categorias nuevas de 2026 (RNID) se reasignan segun la nota metodologica del SESNSP.
+	column 'Tipo historico'
+		dataType: string
+		lineageTag: 12b316e7-26ea-44ca-8b24-6462a4969c86
+		summarizeBy: none
+		sourceColumn: tipo_delito_hist
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy Clasificacion
+		lineageTag: 848527ca-21b0-5393-8705-f7f2a05ebec2
+
+		level 'Bien juridico afectado'
+			lineageTag: ae216744-3b75-57e1-97c6-8ba5cc38d5ef
+			column: 'Bien juridico afectado'
+
+		level 'Tipo de delito'
+			lineageTag: cc3e9715-8ddf-5b9d-983e-3a21c9401007
+			column: 'Tipo de delito'
+
+		level 'Subtipo de delito'
+			lineageTag: 50920dd5-31d9-536b-90c1-8ed0dab2ae26
+			column: 'Subtipo de delito'
+
+		level Modalidad
+			lineageTag: 221229fe-5e2f-5dc4-9ffe-4ffd2583be67
+			column: Modalidad
+
+	partition dim_delito = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_delito.parquet"))
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+

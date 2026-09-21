@@ -1,0 +1,139 @@
+table dim_fecha
+	lineageTag: ae02c9c9-1140-566d-881a-6f3625ce3a85
+	dataCategory: Time
+
+	column fecha_key
+		dataType: int64
+		isHidden
+		lineageTag: 5996927e-ca22-58a4-813e-c0acea258bf1
+		summarizeBy: none
+		sourceColumn: fecha_key
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Primer dia del mes. El grano de la fuente es mensual, no diario.
+	column Fecha
+		dataType: dateTime
+		isKey
+		formatString: mmm yyyy
+		lineageTag: e1cab1ca-d26d-52b7-97c4-ed8c2f0de694
+		summarizeBy: none
+		sourceColumn: fecha
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Ano
+		dataType: int64
+		formatString: 0
+		lineageTag: ce2bc08f-5f5d-5157-b19d-cb9cb7d782ab
+		summarizeBy: none
+		sourceColumn: anio
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes_num
+		dataType: int64
+		isHidden
+		lineageTag: 9ff9f8c7-f7b3-5a31-ae48-d941d8ba8a4d
+		summarizeBy: none
+		sourceColumn: mes_num
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes
+		dataType: string
+		lineageTag: 62e935d9-c5ae-5669-8bc3-734153420634
+		summarizeBy: none
+		sourceColumn: mes_nombre
+		sortByColumn: mes_num
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mes corto'
+		dataType: string
+		displayFolder: Etiquetas
+		lineageTag: 45f4523a-1451-53a5-96b5-617f80494d67
+		summarizeBy: none
+		sourceColumn: mes_corto
+		sortByColumn: mes_num
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		dataType: string
+		lineageTag: d5a1f7a6-cd6d-57b7-9edd-9685602c3e30
+		summarizeBy: none
+		sourceColumn: trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ano-Trimestre
+		dataType: string
+		displayFolder: Etiquetas
+		lineageTag: 4e77e35e-4878-540d-a5f0-5a25b357c0ff
+		summarizeBy: none
+		sourceColumn: anio_trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ano-Mes
+		dataType: string
+		displayFolder: Etiquetas
+		lineageTag: 7c0bba75-e1c8-5556-bd03-4b9845e91bea
+		summarizeBy: none
+		sourceColumn: anio_mes
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Clave de orden para mostrar los anos del mas reciente al mas antiguo.
+	column 'Ano orden desc' = -dim_fecha[Ano]
+		dataType: int64
+		isHidden
+		lineageTag: 7c41a9e2-3b68-4d51-90aa-5e2f1c0d4401
+		summarizeBy: none
+
+	/// Ano ordenado de mas reciente a mas antiguo; solo para la matriz entidad x ano.
+	column 'Ano desc' = dim_fecha[Ano]
+		dataType: int64
+		formatString: 0
+		lineageTag: 7c41a9e2-3b68-4d51-90aa-5e2f1c0d4402
+		summarizeBy: none
+		sortByColumn: 'Ano orden desc'
+
+	/// TRUE si el ano tiene los 12 meses publicados. El reporte filtra por esta columna.
+	column 'Ano cerrado'
+		dataType: boolean
+		isHidden
+		lineageTag: 337a3810-d19b-4388-800d-4e1e4359cd9f
+		summarizeBy: none
+		sourceColumn: anio_completo
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy Calendario
+		lineageTag: 2a098366-e7e1-5b26-8d99-a3386406b80c
+
+		level Ano
+			lineageTag: 4e94fe24-da30-589e-96c9-68680a20d797
+			column: Ano
+
+		level Trimestre
+			lineageTag: c6b7369f-f909-5c16-9044-bd3c6cbda279
+			column: Trimestre
+
+		level Mes
+			lineageTag: 1b36dd3f-653a-5033-af48-dd2e8e13c134
+			column: Mes
+
+	partition dim_fecha = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_fecha.parquet"))
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+

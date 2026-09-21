@@ -1,0 +1,254 @@
+table fact_delitos
+	lineageTag: 0527f4d8-d037-5e5e-a536-c4e8d02987f7
+
+	/// Denuncias registradas.
+	measure Delitos = SUM(fact_delitos[conteo])
+		formatString: #,0
+		lineageTag: 35c17650-020d-5666-aa31-33c6241dab51
+
+	measure 'Tasa nacional' = CALCULATE([Tasa por 100k], REMOVEFILTERS(dim_entidad))
+		formatString: #,0.0
+		displayFolder: Detalle estado
+		lineageTag: 9fa1c32c-3289-4633-a810-1a6b22904041
+
+	measure 'Tasa vs nacional' = DIVIDE([Tasa por 100k], CALCULATE([Tasa por 100k], REMOVEFILTERS(dim_entidad)))
+		formatString: 0.00
+		displayFolder: Detalle estado
+		lineageTag: 96e0cc43-7059-4674-9d35-0c06a4ee5ef3
+
+	measure 'Poblacion total' =
+			CALCULATE(
+			    SUM(dim_poblacion[poblacion]),
+			    TREATAS(VALUES(dim_entidad[entidad_key]), dim_poblacion[clave_ent]),
+			    TREATAS(VALUES(dim_fecha[Ano]), dim_poblacion[anio])
+			)
+		formatString: #,0
+		displayFolder: Contexto
+		lineageTag: ae4af9b1-8b22-5977-83f9-faadcd92b4ed
+
+	/// Denuncias por cada 100,000 habitantes. Compara propension a denunciar tanto como incidencia real -- la cifra negra varia mucho entre entidades.
+	measure 'Tasa por 100k' = DIVIDE([Delitos], [Poblacion total]) * 100000
+		formatString: #,0.0
+		lineageTag: 55cc5c9e-ac82-5c03-8578-c93d8aff748b
+
+	measure 'Ranking nacional' =
+			IF(
+			    HASONEVALUE(dim_entidad[entidad_key]),
+			    RANKX(ALL(dim_entidad), [Tasa por 100k], , DESC, DENSE)
+			)
+		formatString: 0
+		displayFolder: Contexto
+		lineageTag: b017852a-a25b-514a-ac97-037192eb4d2a
+
+	measure '% del total' = DIVIDE([Delitos], CALCULATE([Delitos], ALLSELECTED()))
+		formatString: 0.0%
+		displayFolder: Contexto
+		lineageTag: 3f5aafd3-8236-53ab-8a83-7db7863de927
+
+	measure 'Delitos (tabla)' = CALCULATE([Delitos], REMOVEFILTERS(dim_entidad), TREATAS(VALUES(tabla_estados[entidad_key]), dim_entidad[entidad_key]))
+		formatString: #,0
+		displayFolder: Tabla estados
+		lineageTag: d59a3621-e447-49b8-bc3a-de2cf88bd918
+
+	measure 'Poblacion (tabla)' = VAR y = [Ano final] RETURN CALCULATE([Poblacion total], dim_fecha[Ano] = y, REMOVEFILTERS(dim_entidad), TREATAS(VALUES(tabla_estados[entidad_key]), dim_entidad[entidad_key]))
+		formatString: #,0
+		displayFolder: Tabla estados
+		lineageTag: a4efffd7-c583-4979-bdfb-715d2e5863ef
+
+	measure 'Tasa por 100k (tabla)' = VAR y = [Ano final] RETURN CALCULATE([Tasa por 100k], dim_fecha[Ano] = y, REMOVEFILTERS(dim_entidad), TREATAS(VALUES(tabla_estados[entidad_key]), dim_entidad[entidad_key]))
+		formatString: #,0.0
+		displayFolder: Tabla estados
+		lineageTag: 5654d0e1-ba86-4350-a3a8-a54ab72ec6d4
+
+	measure 'Ranking (tabla)' = IF(HASONEVALUE(tabla_estados[entidad_key]), VAR y = [Ano final] RETURN CALCULATE([Ranking nacional], dim_fecha[Ano] = y, REMOVEFILTERS(dim_entidad), TREATAS(VALUES(tabla_estados[entidad_key]), dim_entidad[entidad_key])))
+		formatString: 0
+		displayFolder: Tabla estados
+		lineageTag: 2071411f-dd06-46c3-9e70-05a45863c377
+
+	measure '% del total (tabla)' = DIVIDE([Delitos (tabla)], CALCULATE([Delitos], REMOVEFILTERS(dim_entidad)))
+		formatString: 0.0%
+		displayFolder: Tabla estados
+		lineageTag: 365f9434-42ba-4cd1-a8a8-dc630ea69577
+
+	measure 'Cambio tasa decada (tabla)' = CALCULATE([Cambio tasa estado periodo %], REMOVEFILTERS(dim_entidad), TREATAS(VALUES(tabla_estados[entidad_key]), dim_entidad[entidad_key]))
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Tabla estados
+		lineageTag: b566f471-cc46-4cc0-9c67-447f66698b1a
+
+	/// Color de fondo de la fila del estado elegido en el slicer; en blanco para las demas.
+	measure 'Color fila seleccionada' = IF(SELECTEDVALUE(tabla_estados[Entidad]) = SELECTEDVALUE(dim_entidad[Entidad]), "#CFE8D3")
+		displayFolder: Tabla estados
+		lineageTag: 7786830e-5090-4240-87bb-c36d1e999547
+
+	/// Primer año seleccionado con datos.
+	measure 'Ano inicial' = MINX(FILTER(VALUES(dim_fecha[Ano]), CALCULATE(NOT ISEMPTY(fact_delitos), REMOVEFILTERS(dim_delito), REMOVEFILTERS(dim_entidad))), dim_fecha[Ano])
+		formatString: 0
+		displayFolder: KPI periodo
+		lineageTag: 3a712f5a-995c-478a-88bc-c45761b20f8b
+
+	/// Ultimo año seleccionado con los 12 meses; si ninguno esta completo, el ultimo con datos.
+	measure 'Ano final' =
+			VAR completos = FILTER(VALUES(dim_fecha[Ano]), CALCULATE(CALCULATE(DISTINCTCOUNT(dim_fecha[mes_num]), fact_delitos), REMOVEFILTERS(dim_delito), REMOVEFILTERS(dim_entidad)) = 12)
+			VAR ultimo = MAXX(FILTER(VALUES(dim_fecha[Ano]), CALCULATE(NOT ISEMPTY(fact_delitos), REMOVEFILTERS(dim_delito), REMOVEFILTERS(dim_entidad))), dim_fecha[Ano])
+			RETURN COALESCE(MAXX(completos, dim_fecha[Ano]), ultimo)
+		formatString: 0
+		displayFolder: KPI periodo
+		lineageTag: 13507794-949b-4816-b754-b66f843c67f1
+
+	/// Sigue al slicer de ano.
+	measure 'Tasa nacional ultimo ano' =
+			VAR y = [Ano final]
+			RETURN CALCULATE([Tasa por 100k], dim_fecha[Ano] = y, REMOVEFILTERS(dim_entidad))
+		formatString: #,0.0
+		displayFolder: KPI periodo
+		lineageTag: b0f71f98-6849-4c33-8696-02692672d50a
+
+	/// Sigue al slicer de ano.
+	measure 'Cambio tasa nacional periodo %' =
+			VAR y0 = [Ano inicial]
+			VAR y1 = [Ano final]
+			VAR r0 = CALCULATE([Tasa por 100k], dim_fecha[Ano] = y0, REMOVEFILTERS(dim_entidad))
+			VAR r1 = CALCULATE([Tasa por 100k], dim_fecha[Ano] = y1, REMOVEFILTERS(dim_entidad))
+			RETURN IF(y1 > y0, DIVIDE(r1 - r0, r0))
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: KPI periodo
+		lineageTag: a6013b1c-6efd-4f48-9563-45772d6f36ee
+
+	/// Sigue al slicer de ano.
+	measure 'Estados sobre promedio ultimo ano' =
+			VAR y = [Ano final]
+			VAR nat = CALCULATE([Tasa por 100k], dim_fecha[Ano] = y, REMOVEFILTERS(dim_entidad))
+			RETURN COUNTROWS(FILTER(VALUES(dim_entidad[Entidad]), CALCULATE([Tasa por 100k], dim_fecha[Ano] = y) > nat))
+		formatString: 0
+		displayFolder: KPI periodo
+		lineageTag: f5cec203-26c2-4e38-8f79-513c6e25ee8a
+
+	/// Sigue al slicer de ano.
+	measure 'Tasa estado ultimo ano' =
+			VAR y = [Ano final]
+			RETURN CALCULATE([Tasa por 100k], dim_fecha[Ano] = y)
+		formatString: #,0.0
+		displayFolder: KPI periodo
+		lineageTag: d66f3392-6061-4a5b-a693-4a1c4d57f6bb
+
+	/// Sigue al slicer de ano.
+	measure 'Ranking estado ultimo ano' =
+			VAR y = [Ano final]
+			RETURN CALCULATE([Ranking nacional], dim_fecha[Ano] = y)
+		formatString: 0
+		displayFolder: KPI periodo
+		lineageTag: 34a34584-d789-4d7f-8b20-954c05c03a9a
+
+	/// Sigue al slicer de ano.
+	measure 'Cambio tasa estado periodo %' =
+			VAR y0 = [Ano inicial]
+			VAR y1 = [Ano final]
+			VAR t0 = CALCULATE([Tasa por 100k], dim_fecha[Ano] = y0)
+			VAR t1 = CALCULATE([Tasa por 100k], dim_fecha[Ano] = y1)
+			RETURN IF(y1 > y0, DIVIDE(t1 - t0, t0))
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: KPI periodo
+		lineageTag: 8bf659b2-9ec8-43e8-adc2-b8fa96f256df
+
+	/// Sigue al slicer de ano.
+	measure 'Tasa vs nacional ultimo ano' =
+			VAR y = [Ano final]
+			RETURN CALCULATE([Tasa vs nacional], dim_fecha[Ano] = y)
+		formatString: 0.00"×"
+		displayFolder: KPI periodo
+		lineageTag: a982c0b1-d0d9-4b1d-90b0-cc1c80090315
+
+	/// TRUE si el ano del contexto tiene los 12 meses cargados.
+	measure 'Ano completo' =
+			CALCULATE(
+			    CALCULATE(DISTINCTCOUNT(dim_fecha[mes_num]), fact_delitos),
+			    ALLEXCEPT(dim_fecha, dim_fecha[Ano]), REMOVEFILTERS(dim_delito), REMOVEFILTERS(dim_entidad)
+			) = 12
+		displayFolder: KPI periodo
+		lineageTag: a58a28bc-b2c5-48ff-9e25-b0159c4d22ee
+
+	/// Delitos por dia del mes contra el promedio diario del ano (100 = promedio). Solo anos completos.
+	measure 'Indice estacional' =
+			VAR completos = FILTER(CALCULATETABLE(VALUES(dim_fecha[Ano]), ALLEXCEPT(dim_fecha, dim_fecha[Ano])), [Ano completo])
+			VAR m = SELECTEDVALUE(dim_fecha[mes_num])
+			VAR delitos_mes = CALCULATE([Delitos], completos)
+			VAR delitos_ano = CALCULATE([Delitos], completos, ALLEXCEPT(dim_fecha, dim_fecha[Ano]))
+			VAR dias_mes = SUMX(completos, DAY(EOMONTH(DATE(dim_fecha[Ano], m, 1), 0)))
+			VAR dias_ano = SUMX(completos, DATE(dim_fecha[Ano], 12, 31) - DATE(dim_fecha[Ano], 1, 1) + 1)
+			RETURN DIVIDE(DIVIDE(delitos_mes, dias_mes), DIVIDE(delitos_ano, dias_ano)) * 100
+		formatString: 0
+		displayFolder: Detalle estado
+		lineageTag: 350ab648-6cf1-48e2-a8ae-2e1b81f02c2b
+
+	/// Tasa por 100k, en blanco en anos parciales para que la linea no caiga.
+	measure 'Tasa estado (anos completos)' = IF([Ano completo], [Tasa por 100k])
+		formatString: #,0.0
+		displayFolder: Detalle estado
+		lineageTag: e206faba-6829-490a-974e-d6ebf53dbf30
+
+	/// Tasa nacional, en blanco en anos parciales.
+	measure 'Tasa nacional (anos completos)' = IF([Ano completo], [Tasa nacional])
+		formatString: #,0.0
+		displayFolder: Detalle estado
+		lineageTag: 2daf44e1-7f41-4eea-a661-c5e7f6d545d1
+
+	/// Mismos meses del ultimo ano publicado contra el ano anterior (p. ej. ene-ago 2026 vs ene-ago 2025).
+	/// Ignora el filtro de anos cerrados y el slicer de ano; sigue a los demas slicers.
+	measure 'Acumulado vs ano anterior %' =
+			VAR ultima = CALCULATE(MAX(fact_delitos[fecha_key]), REMOVEFILTERS())
+			VAR y = INT(ultima / 100)
+			VAR m = MOD(ultima, 100)
+			VAR actual = CALCULATE([Delitos], REMOVEFILTERS(dim_fecha), dim_fecha[Ano] = y, dim_fecha[mes_num] <= m)
+			VAR previo = CALCULATE([Delitos], REMOVEFILTERS(dim_fecha), dim_fecha[Ano] = y - 1, dim_fecha[mes_num] <= m)
+			RETURN DIVIDE(actual - previo, previo)
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: KPI periodo
+		lineageTag: 0942ad36-7ec3-4a2c-84f3-8a1479a4d2ca
+
+	column fecha_key
+		dataType: int64
+		isHidden
+		lineageTag: 6fb4844a-7549-571b-adcc-d1faf3381126
+		summarizeBy: none
+		sourceColumn: fecha_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column entidad_key
+		dataType: int64
+		isHidden
+		lineageTag: 328df19e-6f8c-5d05-a6e0-5e16fee99b43
+		summarizeBy: none
+		sourceColumn: entidad_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column delito_key
+		dataType: int64
+		isHidden
+		lineageTag: afd1cbc7-2fa4-59e2-877d-b4830b095e47
+		summarizeBy: none
+		sourceColumn: delito_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column conteo
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: 8b69a5ef-7d80-5cbe-92ca-0606fa18f9ff
+		summarizeBy: none
+		sourceColumn: conteo
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_delitos = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_delitos.parquet"))
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,47 @@
+table Tbl_p0_simpleTable1
+	lineageTag: aaad037a-d58d-418b-a60a-93c4d41d95a6
+
+	column Entity
+		lineageTag: 1a195484-a06b-4b19-8860-7e9bc9f726eb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Entity]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Incidents
+		lineageTag: 365146e1-ce93-4f9f-98f0-61bcf03da9c1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Incidents]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Population
+		lineageTag: 426711aa-56ab-4da4-85b0-e2a03c46bbf3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Population]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Rate
+		lineageTag: 260d7ab7-4599-4fe2-9346-b1561fff59bb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Rate]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Rank
+		lineageTag: b76aece5-7348-40e0-ac5a-9817a49eeedf
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Rank]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Tbl_p0_simpleTable1 = calculated
+		mode: import
+		source = DATATABLE("Entity", STRING, "Incidents", STRING, "Population", STRING, "Rate", STRING, "Rank", STRING, {{"Mexico City", "150000", "9200000", "1630", "1"}, {"Jalisco", "120000", "8300000", "1445", "2"}, {"Nuevo Leon", "90000", "5800000", "1551", "3"}})
+

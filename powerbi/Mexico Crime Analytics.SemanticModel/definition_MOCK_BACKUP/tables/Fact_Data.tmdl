@@ -1,0 +1,53 @@
+table Fact_Data
+	lineageTag: beb8eec5-7e0d-4b9a-97e1-d4fb3251cd5e
+
+	column VisualRef
+		lineageTag: 38d4d2d9-470e-4bc8-a6b7-feef97fe867e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [VisualRef]
+
+	column Category
+		lineageTag: 284ff7e0-3a4d-4833-a8bd-1ae78f4f6746
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Category]
+		sortByColumn: Order
+
+	column Series
+		lineageTag: 0517b8ab-5d8d-471f-8efa-7b5c5df60c36
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Series]
+
+	column Amount
+		formatString: #,0
+		lineageTag: 87137321-dfbf-4fb5-b47c-912a2f49637f
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Amount]
+
+	column Order
+		lineageTag: 95744053-d08f-4d57-abc2-fee4eb199476
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Order]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		formatString: General Date
+		lineageTag: 17ae08f3-19dd-4327-a3f9-bfc0d1ce9a50
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		variation Variation
+			isDefault
+			relationship: b80c9a40-e20b-465e-82f0-b78f3938eea4
+			defaultHierarchy: LocalDateTable_b42acb00-229f-4e59-a132-49b2400b2c04.'Date Hierarchy'
+
+	partition Fact_Data = calculated
+		mode: import
+		source = DATATABLE("VisualRef", STRING, "Category", STRING, "Series", STRING, "Amount", INTEGER, "Order", INTEGER, "Date", DATETIME, {{"p1_slicer2", "Homicide", "", 0, 0, BLANK()}, {"p1_slicer2", "Robbery", "", 0, 1, BLANK()}, {"p1_slicer2", "Theft", "", 0, 2, BLANK()}, {"p1_slicer2", "Assault", "", 0, 3, BLANK()}, {"p1_slicer1", "2023", "", 0, 0, BLANK()}, {"p1_slicer1", "2022", "", 0, 1, BLANK()}, {"p1_slicer1", "2021", "", 0, 2, BLANK()}, {"p1_slicer1", "2020", "", 0, 3, BLANK()}, {"p0_donutChart1", "Homicide", "", 20, 0, BLANK()}, {"p0_donutChart1", "Robbery", "", 30, 1, BLANK()}, {"p0_donutChart1", "Theft", "", 40, 2, BLANK()}, {"p0_donutChart1", "Assault", "", 10, 3, BLANK()}, {"p0_areaChart1", "Jan", "", 85, 0, BLANK()}, {"p0_areaChart1", "Feb", "", 92, 1, BLANK()}, {"p0_areaChart1", "Mar", "", 88, 2, BLANK()}, {"p0_areaChart1", "Apr", "", 95, 3, BLANK()}, {"p0_areaChart1", "May", "", 105, 4, BLANK()}, {"p0_areaChart1", "Jun", "", 110, 5, BLANK()}, {"p0_areaChart1", "Jul", "", 108, 6, BLANK()}, {"p0_areaChart1", "Aug", "", 115, 7, BLANK()}, {"p0_areaChart1", "Sep", "", 102, 8, BLANK()}, {"p0_areaChart1", "Oct", "", 98, 9, BLANK()}, {"p0_areaChart1", "Nov", "", 94, 10, BLANK()}, {"p0_areaChart1", "Dec", "", 100, 11, BLANK()}, {"p0_barChart1", "Colima", "", 1200, 0, BLANK()}, {"p0_barChart1", "Baja Cal.", "", 1150, 1, BLANK()}, {"p0_barChart1", "Zacatecas", "", 1100, 2, BLANK()}, {"p0_barChart1", "Guanajuato", "", 1050, 3, BLANK()}, {"p0_barChart1", "Morelos", "", 1000, 4, BLANK()}, {"p0_columnChart1", "North", "", 800, 0, BLANK()}, {"p0_columnChart1", "Central", "", 1200, 1, BLANK()}, {"p0_columnChart1", "South", "", 600, 2, BLANK()}, {"p0_columnChart1", "East", "", 900, 3, BLANK()}, {"p0_columnChart1", "West", "", 700, 4, BLANK()}, {"p0_donutChart2", "Safe", "", 65, 0, BLANK()}, {"p0_donutChart2", "High Risk", "", 35, 1, BLANK()}, {"p2_slicer1", "CDMX", "", 0, 0, BLANK()}, {"p2_slicer1", "Jalisco", "", 0, 1, BLANK()}, {"p2_slicer1", "Nuevo León", "", 0, 2, BLANK()}, {"p2_slicer1", "Estado de México", "", 0, 3, BLANK()}, {"p2_slicer1", "Veracruz", "", 0, 4, BLANK()}, {"p2_slicer2", "2015-01-01", "", 0, 0, "2015-01-01"}, {"p2_slicer2", "2025-12-31", "", 0, 1, "2025-12-31"}, {"p1_columnChart1", "Jan", "", 1200, 0, BLANK()}, {"p1_columnChart1", "Feb", "", 1150, 1, BLANK()}, {"p1_columnChart1", "Mar", "", 1300, 2, BLANK()}, {"p1_columnChart1", "Apr", "", 1250, 3, BLANK()}, {"p1_columnChart1", "May", "", 1400, 4, BLANK()}, {"p1_columnChart1", "Jun", "", 1350, 5, BLANK()}, {"p1_columnChart1", "Jul", "", 1450, 6, BLANK()}, {"p1_columnChart1", "Aug", "", 1420, 7, BLANK()}, {"p1_columnChart1", "Sep", "", 1380, 8, BLANK()}, {"p1_columnChart1", "Oct", "", 1410, 9, BLANK()}, {"p1_columnChart1", "Nov", "", 1390, 10, BLANK()}, {"p1_columnChart1", "Dec", "", 1500, 11, BLANK()}, {"p1_lineChart1", "2015", "State Rate", 40, 0, BLANK()}, {"p1_lineChart1", "2015", "National Rate", 35, 0, BLANK()}, {"p1_lineChart1", "2016", "State Rate", 41, 1, BLANK()}, {"p1_lineChart1", "2016", "National Rate", 36, 1, BLANK()}, {"p1_lineChart1", "2017", "State Rate", 44, 2, BLANK()}, {"p1_lineChart1", "2017", "National Rate", 36, 2, BLANK()}, {"p1_lineChart1", "2018", "State Rate", 45, 3, BLANK()}, {"p1_lineChart1", "2018", "National Rate", 38, 3, BLANK()}, {"p1_lineChart1", "2019", "State Rate", 46, 4, BLANK()}, {"p1_lineChart1", "2019", "National Rate", 38, 4, BLANK()}, {"p1_lineChart1", "2020", "State Rate", 45, 5, BLANK()}, {"p1_lineChart1", "2020", "National Rate", 38, 5, BLANK()}, {"p1_lineChart1", "2021", "State Rate", 46, 6, BLANK()}, {"p1_lineChart1", "2021", "National Rate", 38, 6, BLANK()}, {"p1_lineChart1", "2022", "State Rate", 46, 7, BLANK()}, {"p1_lineChart1", "2022", "National Rate", 39, 7, BLANK()}, {"p1_lineChart1", "2023", "State Rate", 46, 8, BLANK()}, {"p1_lineChart1", "2023", "National Rate", 39, 8, BLANK()}, {"p1_lineChart1", "2024", "State Rate", 46, 9, BLANK()}, {"p1_lineChart1", "2024", "National Rate", 39, 9, BLANK()}, {"p1_lineChart1", "2025", "State Rate", 45, 10, BLANK()}, {"p1_lineChart1", "2025", "National Rate", 39, 10, BLANK()}, {"p1_columnChart2", "Jan", "", 64, 0, BLANK()}, {"p1_columnChart2", "Feb", "", 75, 1, BLANK()}, {"p1_columnChart2", "Mar", "", 86, 2, BLANK()}, {"p1_columnChart2", "Apr", "", 62, 3, BLANK()}, {"p1_columnChart2", "May", "", 73, 4, BLANK()}, {"p1_columnChart2", "Jun", "", 84, 5, BLANK()}, {"p1_columnChart2", "Jul", "", 60, 6, BLANK()}, {"p1_columnChart2", "Aug", "", 71, 7, BLANK()}, {"p1_columnChart2", "Sep", "", 82, 8, BLANK()}, {"p1_columnChart2", "Oct", "", 58, 9, BLANK()}, {"p1_columnChart2", "Nov", "", 69, 10, BLANK()}, {"p1_columnChart2", "Dec", "", 80, 11, BLANK()}, {"p1_donutChart1", "A", "", 64, 0, BLANK()}, {"p1_donutChart1", "B", "", 77, 1, BLANK()}, {"p1_donutChart1", "C", "", 90, 2, BLANK()}, {"p1_donutChart1", "D", "", 58, 3, BLANK()}, {"p1_barChart1", "Theft", "", 5000, 0, BLANK()}, {"p1_barChart1", "Assault", "", 4200, 1, BLANK()}, {"p1_barChart1", "Robbery", "", 3800, 2, BLANK()}, {"p1_barChart1", "Fraud", "", 3100, 3, BLANK()}, {"p1_barChart1", "Vandalism", "", 2800, 4, BLANK()}, {"p1_barChart1", "Burglary", "", 2500, 5, BLANK()}, {"p1_barChart1", "Extortion", "", 1800, 6, BLANK()}, {"p1_barChart1", "Homicide", "", 1200, 7, BLANK()}, {"p1_barChart1", "Kidnapping", "", 800, 8, BLANK()}, {"p1_barChart1", "Arson", "", 500, 9, BLANK()}})
+

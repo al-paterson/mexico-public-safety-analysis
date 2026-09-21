@@ -1,0 +1,6 @@
+/// Folder with the parquet files. Set it to <your clone>\data\parquet\ (keep the trailing backslash), then Refresh.
+expression DataFolder = "D:\SQL Projects\mexico-public-safety-analysis\data\parquet\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: f542284a-71d4-4c61-b9ba-0b45243c0bbe
+
+	annotation PBI_ResultType = Text
+

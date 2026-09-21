@@ -1,0 +1,10 @@
+cultureInfo es-MX
+
+	linguisticMetadata =
+			{
+			  "Version": "4.1.0",
+			  "Language": "es-MX",
+			  "Entities": {}
+			}
+		contentType: json
+

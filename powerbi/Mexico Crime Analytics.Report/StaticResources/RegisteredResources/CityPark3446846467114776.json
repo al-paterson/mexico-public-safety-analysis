@@ -1,0 +1,64 @@
+{
+  "name": "City Park",
+  "dataColors": [
+    "#57A661",
+    "#4B8B3B",
+    "#7CB342",
+    "#C0CA33",
+    "#F9A825",
+    "#FF7043",
+    "#8D6E63",
+    "#78909C"
+  ],
+  "foreground": "#333333",
+  "background": "#FFFFFF",
+  "tableAccent": "#57A661",
+  "firstLevelElements": "#333333",
+  "secondLevelElements": "#5A5A5A",
+  "thirdLevelElements": "#E8F5E9",
+  "fourthLevelElements": "#A5A5A5",
+  "secondaryBackground": "#E0E0E0",
+  "good": "#4CAF50",
+  "neutral": "#FFC107",
+  "bad": "#F44336",
+  "maximum": "#57A661",
+  "center": "#FFC107",
+  "minimum": "#E8F5E9",
+  "foregroundNeutralSecondary": "#5A5A5A",
+  "foregroundLight": "#E8F5E9",
+  "foregroundNeutralTertiary": "#A5A5A5",
+  "backgroundNeutral": "#F0F0F2",
+  "textClasses": {
+    "callout": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 34,
+      "color": "#252423"
+    },
+    "title": {
+      "fontFace": "Segoe UI Bold",
+      "fontSize": 9,
+      "color": "#252423"
+    },
+    "header": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 9,
+      "color": "#252423"
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "fontSize": 8,
+      "color": "#252423"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "general": [
+          {
+            "keepLayerOrder": true
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "version": "1.0.0.23",
+  "author": {
+    "name": "AL Paterson",
+    "email": "238023552+al-paterson@users.noreply.github.com"
+  },
+  "resources": [
+    {
+      "resourceId": "rId0",
+      "sourceType": 5,
+      "file": "resources/customLayoutContainerGUID2026.pbiviz.json"
+    }
+  ],
+  "visual": {
+    "name": "customLayoutContainer",
+    "displayName": "Clean Transparent Container",
+    "guid": "customLayoutContainerGUID2026",
+    "visualClassName": "Visual",
+    "version": "1.0.0.23",
+    "description": "Titled rounded panel/card with icon, value and trend pill; renders backboard, header, KPI card or chart-wrapper panel by mode.",
+    "supportUrl": "https://example.com",
+    "gitHubUrl": ""
+  },
+  "metadata": {
+    "pbivizjson": {
+      "resourceId": "rId0"
+    }
+  }
+}

@@ -1,0 +1,395 @@
+{
+  "visual": {
+    "name": "customLayoutContainer",
+    "displayName": "Clean Transparent Container",
+    "guid": "customLayoutContainerGUID2026",
+    "visualClassName": "Visual",
+    "version": "1.0.0.23",
+    "description": "Titled rounded panel/card with icon, value and trend pill; renders backboard, header, KPI card or chart-wrapper panel by mode.",
+    "supportUrl": "https://example.com",
+    "gitHubUrl": ""
+  },
+  "author": {
+    "name": "AL Paterson",
+    "email": "238023552+al-paterson@users.noreply.github.com"
+  },
+  "apiVersion": "5.3.0",
+  "style": "style/visual.less",
+  "stringResources": {},
+  "capabilities": {
+    "dataRoles": [
+      {
+        "displayName": "Value",
+        "name": "value",
+        "kind": "Measure"
+      },
+      {
+        "displayName": "Comparison",
+        "name": "comparison",
+        "kind": "Measure"
+      }
+    ],
+    "dataViewMappings": [
+      {
+        "conditions": [
+          {
+            "value": {
+              "max": 1
+            },
+            "comparison": {
+              "max": 1
+            }
+          }
+        ],
+        "categorical": {
+          "values": {
+            "select": [
+              {
+                "bind": {
+                  "to": "value"
+                }
+              },
+              {
+                "bind": {
+                  "to": "comparison"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "objects": {
+      "panel": {
+        "displayName": "Panel",
+        "properties": {
+          "mode": {
+            "displayName": "Mode",
+            "type": {
+              "enumeration": [
+                {
+                  "displayName": "Card",
+                  "value": "card"
+                },
+                {
+                  "displayName": "Panel",
+                  "value": "panel"
+                },
+                {
+                  "displayName": "Header",
+                  "value": "header"
+                },
+                {
+                  "displayName": "Backboard",
+                  "value": "backboard"
+                },
+                {
+                  "displayName": "Sidebar",
+                  "value": "sidebar"
+                }
+              ]
+            }
+          },
+          "fill": {
+            "displayName": "Fill color",
+            "type": {
+              "fill": {
+                "solid": {
+                  "color": true
+                }
+              }
+            }
+          },
+          "radius": {
+            "displayName": "Corner radius",
+            "type": {
+              "numeric": true
+            }
+          },
+          "borderShow": {
+            "displayName": "Border",
+            "type": {
+              "bool": true
+            }
+          },
+          "borderColor": {
+            "displayName": "Border color",
+            "type": {
+              "fill": {
+                "solid": {
+                  "color": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "titleText": {
+        "displayName": "Title",
+        "properties": {
+          "show": {
+            "displayName": "Show",
+            "type": {
+              "bool": true
+            }
+          },
+          "text": {
+            "displayName": "Text",
+            "type": {
+              "text": true
+            }
+          },
+          "subtitle": {
+            "displayName": "Subtitle",
+            "type": {
+              "text": true
+            }
+          },
+          "fontSize": {
+            "displayName": "Text size",
+            "type": {
+              "formatting": {
+                "fontSize": true
+              }
+            }
+          },
+          "color": {
+            "displayName": "Color",
+            "type": {
+              "fill": {
+                "solid": {
+                  "color": true
+                }
+              }
+            }
+          },
+          "subtitleColor": {
+            "displayName": "Subtitle color",
+            "type": {
+              "fill": {
+                "solid": {
+                  "color": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "icon": {
+        "displayName": "Icon",
+        "properties": {
+          "show": {
+            "displayName": "Show",
+            "type": {
+              "bool": true
+            }
+          },
+          "name": {
+            "displayName": "Icon",
+            "type": {
+              "enumeration": [
+                {
+                  "displayName": "Chart",
+                  "value": "chart"
+                },
+                {
+                  "displayName": "Bar chart",
+                  "value": "bar"
+                },
+                {
+                  "displayName": "Pie",
+                  "value": "pie"
+                },
+                {
+                  "displayName": "Percent",
+                  "value": "percent"
+                },
+                {
+                  "displayName": "People",
+                  "value": "people"
+                },
+                {
+                  "displayName": "Map pin",
+                  "value": "pin"
+                },
+                {
+                  "displayName": "Shield",
+                  "value": "shield"
+                },
+                {
+                  "displayName": "Table",
+                  "value": "table"
+                },
+                {
+                  "displayName": "Box",
+                  "value": "box"
+                },
+                {
+                  "displayName": "Sigma",
+                  "value": "sigma"
+                },
+                {
+                  "displayName": "Trending Up",
+                  "value": "trending-up"
+                },
+                {
+                  "displayName": "Trending Down",
+                  "value": "trending-down"
+                },
+                {
+                  "displayName": "Users",
+                  "value": "users"
+                },
+                {
+                  "displayName": "Layers",
+                  "value": "layers"
+                },
+                {
+                  "displayName": "Map pin (Lucide)",
+                  "value": "map-pin"
+                },
+                {
+                  "displayName": "Map",
+                  "value": "map"
+                },
+                {
+                  "displayName": "Shield (Material)",
+                  "value": "shield-m"
+                },
+                {
+                  "displayName": "Location (Material)",
+                  "value": "pin-m"
+                },
+                {
+                  "displayName": "Activity",
+                  "value": "activity"
+                },
+                {
+                  "displayName": "Bar chart (horizontal)",
+                  "value": "chart-bar"
+                },
+                {
+                  "displayName": "Column chart",
+                  "value": "chart-column"
+                },
+                {
+                  "displayName": "Pie chart",
+                  "value": "chart-pie"
+                }
+              ]
+            }
+          },
+          "size": {
+            "displayName": "Size",
+            "type": {
+              "numeric": true
+            }
+          },
+          "color": {
+            "displayName": "Color",
+            "type": {
+              "fill": {
+                "solid": {
+                  "color": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "value": {
+        "displayName": "Value (card)",
+        "properties": {
+          "label": {
+            "displayName": "Label",
+            "type": {
+              "text": true
+            }
+          },
+          "fontSize": {
+            "displayName": "Value size",
+            "type": {
+              "formatting": {
+                "fontSize": true
+              }
+            }
+          },
+          "color": {
+            "displayName": "Value color",
+            "type": {
+              "fill": {
+                "solid": {
+                  "color": true
+                }
+              }
+            }
+          },
+          "labelColor": {
+            "displayName": "Label color",
+            "type": {
+              "fill": {
+                "solid": {
+                  "color": true
+                }
+              }
+            }
+          },
+          "precision": {
+            "displayName": "Decimals",
+            "type": {
+              "numeric": true
+            }
+          }
+        }
+      },
+      "pill": {
+        "displayName": "Trend pill",
+        "properties": {
+          "show": {
+            "displayName": "Show",
+            "type": {
+              "bool": true
+            }
+          },
+          "goodColor": {
+            "displayName": "Good color",
+            "type": {
+              "fill": {
+                "solid": {
+                  "color": true
+                }
+              }
+            }
+          },
+          "badColor": {
+            "displayName": "Bad color",
+            "type": {
+              "fill": {
+                "solid": {
+                  "color": true
+                }
+              }
+            }
+          },
+          "invert": {
+            "displayName": "Invert (down is good)",
+            "type": {
+              "bool": true
+            }
+          }
+        }
+      }
+    },
+    "privileges": []
+  },
+  "content": {
+    "js": "var customLayoutContainerGUID2026;(()=>{\"use strict\";var e={754(e,a,t){t.d(a,{Kx:()=>o,PA:()=>m,St:()=>n,Tn:()=>r,iB:()=>p,jF:()=>c,ks:()=>v,sk:()=>u});var l=t(639);class i{}class s extends i{}class o{}class n extends i{}class r extends s{}class d extends i{constructor(e){super(),Object.assign(this,e)}getFormattingSlice(e,a){const t=this.type,l=this.name,i={displayName:a&&this.displayNameKey?a.getDisplayName(this.displayNameKey):this.displayName,description:a&&this.descriptionKey?a.getDisplayName(this.descriptionKey):this.description,uid:e+\"-\"+l};return Object.assign(Object.assign({},i),{control:{type:t,properties:this.getFormattingComponent(e,a)}})}getFormattingComponent(e,a){return{descriptor:l.y(e,this),value:this.value}}getRevertToDefaultDescriptor(e){return[{objectName:e,propertyName:this.name}]}setPropertiesValues(e,a){var t;const i=null===(t=null==e?void 0:e[a])||void 0===t?void 0:t[this.name];this.value=l.D(this,i,this.value)}}class c extends d{constructor(e){super(e),this.type=\"ToggleSwitch\"}}class u extends d{constructor(e){super(e),this.type=\"ColorPicker\"}getFormattingComponent(e){return Object.assign(Object.assign({},super.getFormattingComponent(e)),{defaultColor:this.defaultColor,isNoFillItemSupported:this.isNoFillItemSupported})}}class p extends d{constructor(e){super(e),this.type=\"NumUpDown\"}getFormattingComponent(e){return Object.assign(Object.assign({},super.getFormattingComponent(e)),{options:this.options})}}class m extends d{constructor(e){super(e),this.type=\"Dropdown\"}getFormattingComponent(e){return Object.assign(Object.assign({},super.getFormattingComponent(e)),{items:this.items})}}class v extends d{constructor(e){super(e),this.type=\"TextInput\"}getFormattingComponent(e){return Object.assign(Object.assign({},super.getFormattingComponent(e)),{placeholder:this.placeholder})}}},667(e,a,t){var l=t(754);t.d(a,[\"A\",0,class{constructor(e){this.localizationManager=e}populateFormattingSettingsModel(e,a){var t,i;const s=new e,o=null===(t=null==a?void 0:a.metadata)||void 0===t?void 0:t.objects;return o&&(null===(i=s.cards)||void 0===i||i.forEach(e=>{var a;e instanceof l.St&&(null===(a=e.topLevelSlice)||void 0===a||a.setPropertiesValues(o,e.name)),(e instanceof l.Tn?[e]:e.groups).forEach(a=>{var t,l,i,s;null===(t=a.topLevelSlice)||void 0===t||t.setPropertiesValues(o,e.name),null===(l=null==a?void 0:a.slices)||void 0===l||l.forEach(a=>{null==a||a.setPropertiesValues(o,e.name)}),null===(s=null===(i=null==a?void 0:a.container)||void 0===i?void 0:i.containerItems)||void 0===s||s.forEach(a=>{var t;null===(t=null==a?void 0:a.slices)||void 0===t||t.forEach(a=>{null==a||a.setPropertiesValues(o,e.name)})})})})),s}buildFormattingModel(e){const a={cards:[]};return e.cards.filter(({visible:e=!0})=>e).forEach(e=>{var t;const i={displayName:this.localizationManager&&e.displayNameKey?this.localizationManager.getDisplayName(e.displayNameKey):e.displayName,description:this.localizationManager&&e.descriptionKey?this.localizationManager.getDisplayName(e.descriptionKey):e.description,groups:[],uid:e.name+\"-card\",analyticsPane:e.analyticsPane},s=e.name;if(e.topLevelSlice){const a=e.topLevelSlice.getFormattingSlice(s,this.localizationManager);a.suppressDisplayName=!0,i.topLevelToggle=a}null===(t=e.onPreProcess)||void 0===t||t.call(e);const o=e instanceof l.Tn;(o?[e].filter(({visible:e=!0})=>e):e.groups.filter(({visible:e=!0})=>e)).forEach(e=>{const a=e.name+\"-group\",t={displayName:o?void 0:this.localizationManager&&e.displayNameKey?this.localizationManager.getDisplayName(e.displayNameKey):e.displayName,description:o?void 0:this.localizationManager&&e.descriptionKey?this.localizationManager.getDisplayName(e.descriptionKey):e.description,slices:[],uid:a,collapsible:e.collapsible,delaySaveSlices:e.delaySaveSlices,disabled:e.disabled,disabledReason:e.disabledReason};i.groups.push(t);const l={};if(e.container){const i=e.container,o=a+\"-container\",n={displayName:this.localizationManager&&i.displayNameKey?this.localizationManager.getDisplayName(i.displayNameKey):i.displayName,description:this.localizationManager&&i.descriptionKey?this.localizationManager.getDisplayName(i.descriptionKey):i.description,containerItems:[],uid:o};i.containerItems.forEach(e=>{const a=e.displayNameKey?e.displayNameKey:e.displayName,t=o+a,i={displayName:this.localizationManager&&e.displayNameKey?this.localizationManager.getDisplayName(e.displayNameKey):e.displayName,slices:[],uid:t};this.buildFormattingSlices({slices:e.slices,objectName:s,sliceNames:l,formattingSlices:i.slices}),n.containerItems.push(i)}),t.container=n}if(e.slices){if(e.topLevelSlice){const a=e.topLevelSlice.getFormattingSlice(s,this.localizationManager);a.suppressDisplayName=!0,(null==t.displayName?i:t).topLevelToggle=a}this.buildFormattingSlices({slices:e.slices,objectName:s,sliceNames:l,formattingSlices:t.slices})}}),i.revertToDefaultDescriptors=this.getRevertToDefaultDescriptor(e),a.cards.push(i)}),a}buildFormattingSlices({slices:e,objectName:a,sliceNames:t,formattingSlices:l}){null==e||e.filter(({visible:e=!0})=>e).forEach(e=>{const i=null==e?void 0:e.getFormattingSlice(a,this.localizationManager);i&&(void 0===t[e.name]?t[e.name]=0:(t[e.name]++,i.uid=`${i.uid}-${t[e.name]}`),l.push(i))})}getRevertToDefaultDescriptor(e){var a;const t={},i=[];let s,o=[];return e instanceof l.St&&e.topLevelSlice&&i.push(...null===(a=e.topLevelSlice)||void 0===a?void 0:a.getRevertToDefaultDescriptor(e.name)),(e instanceof l.Tn?[e].filter(({visible:e=!0})=>e):e.groups.filter(({visible:e=!0})=>e)).forEach(a=>{var l,n;s=this.getSlicesRevertToDefaultDescriptor(e.name,a.slices,t,a.topLevelSlice),null===(n=null===(l=a.container)||void 0===l?void 0:l.containerItems)||void 0===n||n.forEach(a=>{o=o.concat(this.getSlicesRevertToDefaultDescriptor(e.name,a.slices,t))}),i.push(...s.concat(o))}),i}getSlicesRevertToDefaultDescriptor(e,a,t,l){let i=[];return l&&(t[l.name]=!0,i=i.concat(l.getRevertToDefaultDescriptor(e))),null==a||a.forEach(a=>{a&&!t[a.name]&&(t[a.name]=!0,i=i.concat(a.getRevertToDefaultDescriptor(e)))}),i}}])},674(e,a,t){t.d(a,{O:()=>i.A,z:()=>l});var l=t(754),i=t(667)},639(e,a,t){function l(e,a){return{objectName:e,propertyName:a.name,selector:a.selector,altConstantValueSelector:a.altConstantSelector,instanceKind:a.instanceKind}}function i(e,a,t){return null==a||\"object\"==typeof a&&!a.solid?t:a.solid?{value:null==a?void 0:a.solid.color}:\"Dropdown\"===(null==e?void 0:e.type)&&e.items?e.items.find(e=>e.value==a):a}t.d(a,{D:()=>i,y:()=>l})},980(e,a,t){t.d(a,{S:()=>u});var l=t(674),i=l.z.Tn,s=l.z.Kx;class o extends i{mode=new l.z.PA({name:\"mode\",displayName:\"Mode\",items:[{displayName:\"Card\",value:\"card\"},{displayName:\"Panel\",value:\"panel\"},{displayName:\"Header\",value:\"header\"},{displayName:\"Backboard\",value:\"backboard\"},{displayName:\"Sidebar\",value:\"sidebar\"}],value:{displayName:\"Card\",value:\"card\"}});fill=new l.z.sk({name:\"fill\",displayName:\"Fill color\",value:{value:\"#FFFFFF\"}});radius=new l.z.iB({name:\"radius\",displayName:\"Corner radius\",value:10});borderShow=new l.z.jF({name:\"borderShow\",displayName:\"Border\",value:!0});borderColor=new l.z.sk({name:\"borderColor\",displayName:\"Border color\",value:{value:\"#E8E8E8\"}});name=\"panel\";displayName=\"Panel\";slices=[this.mode,this.fill,this.radius,this.borderShow,this.borderColor]}class n extends i{show=new l.z.jF({name:\"show\",displayName:\"Show\",value:!0});text=new l.z.ks({name:\"text\",displayName:\"Text\",value:\"\",placeholder:\"Title\"});subtitle=new l.z.ks({name:\"subtitle\",displayName:\"Subtitle\",value:\"\",placeholder:\"Subtitle\"});fontSize=new l.z.iB({name:\"fontSize\",displayName:\"Text size\",value:13});color=new l.z.sk({name:\"color\",displayName:\"Color\",value:{value:\"#252423\"}});subtitleColor=new l.z.sk({name:\"subtitleColor\",displayName:\"Subtitle color\",value:{value:\"#605E5C\"}});name=\"titleText\";displayName=\"Title\";slices=[this.show,this.text,this.subtitle,this.fontSize,this.color,this.subtitleColor]}class r extends i{show=new l.z.jF({name:\"show\",displayName:\"Show\",value:!0});iconName=new l.z.PA({name:\"name\",displayName:\"Icon\",items:[{displayName:\"Chart\",value:\"chart\"},{displayName:\"Bar chart\",value:\"bar\"},{displayName:\"Pie\",value:\"pie\"},{displayName:\"Percent\",value:\"percent\"},{displayName:\"People\",value:\"people\"},{displayName:\"Map pin\",value:\"pin\"},{displayName:\"Shield\",value:\"shield\"},{displayName:\"Table\",value:\"table\"},{displayName:\"Box\",value:\"box\"},{displayName:\"Shield (Material)\",value:\"shield-m\"},{displayName:\"Location (Material)\",value:\"pin-m\"},{displayName:\"Map pin (Lucide)\",value:\"map-pin\"},{displayName:\"Map\",value:\"map\"},{displayName:\"Sigma (total)\",value:\"sigma\"},{displayName:\"Trending up\",value:\"trending-up\"},{displayName:\"Trending down\",value:\"trending-down\"},{displayName:\"Users\",value:\"users\"},{displayName:\"Layers\",value:\"layers\"},{displayName:\"Activity\",value:\"activity\"},{displayName:\"Bar chart (horizontal)\",value:\"chart-bar\"},{displayName:\"Column chart\",value:\"chart-column\"},{displayName:\"Pie chart\",value:\"chart-pie\"}],value:{displayName:\"Chart\",value:\"chart\"}});size=new l.z.iB({name:\"size\",displayName:\"Size\",value:18});color=new l.z.sk({name:\"color\",displayName:\"Color\",value:{value:\"#4B8B3B\"}});name=\"icon\";displayName=\"Icon\";slices=[this.show,this.iconName,this.size,this.color]}class d extends i{label=new l.z.ks({name:\"label\",displayName:\"Label\",value:\"\",placeholder:\"Label\"});fontSize=new l.z.iB({name:\"fontSize\",displayName:\"Value size\",value:30});color=new l.z.sk({name:\"color\",displayName:\"Value color\",value:{value:\"#252423\"}});labelColor=new l.z.sk({name:\"labelColor\",displayName:\"Label color\",value:{value:\"#252423\"}});precision=new l.z.iB({name:\"precision\",displayName:\"Decimals\",value:0});name=\"value\";displayName=\"Value (card)\";slices=[this.label,this.fontSize,this.color,this.labelColor,this.precision]}class c extends i{show=new l.z.jF({name:\"show\",displayName:\"Show\",value:!1});goodColor=new l.z.sk({name:\"goodColor\",displayName:\"Good color\",value:{value:\"#4B8B3B\"}});badColor=new l.z.sk({name:\"badColor\",displayName:\"Bad color\",value:{value:\"#D64550\"}});invert=new l.z.jF({name:\"invert\",displayName:\"Invert (down is good)\",value:!1});name=\"pill\";displayName=\"Trend pill\";slices=[this.show,this.goodColor,this.badColor,this.invert]}class u extends s{panelCard=new o;titleCard=new n;iconCard=new r;valueCard=new d;pillCard=new c;cards=[this.panelCard,this.titleCard,this.iconCard,this.valueCard,this.pillCard]}},789(e,a,t){t.d(a,{b:()=>k});var l=t(674),i=t(980);const s={activity:\"M22 12h-4l-3 9L9 3l-3 9H2\",\"chart-bar\":\"M3 3v16a2 2 0 0 0 2 2h16 M7 16h8 M7 11h12 M7 6h3\",\"chart-column\":\"M3 3v16a2 2 0 0 0 2 2h16 M18 17V9 M13 17V5 M8 17v-3\",\"chart-pie\":\"M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z M21.21 15.89A10 10 0 1 1 8 2.83\",chart:\"M3 3v18h18 M7 15l3-4 3 3 5-7\",\"shield-m\":\"M480-80q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z\",\"pin-m\":\"M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 294q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z\",\"map-pin\":\"M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0 M15 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0z\",map:\"M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z M15 5.764v15 M9 3.236v15\",sigma:\"M18 7V4H6l6 8-6 8h12v-3\",\"trending-up\":\"M16 7h6v6 M22 7l-8.5 8.5-5-5L2 17\",\"trending-down\":\"M16 17h6v-6 M22 17l-8.5-8.5-5 5L2 7\",users:\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0z M22 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75\",layers:\"M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z M2 12.18a1 1 0 0 0 .6.9l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 .6-.91 M2 17.18a1 1 0 0 0 .6.9l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 .6-.91\",bar:\"M4 20V10 M10 20V4 M16 20v-7 M20 20H2\",pie:\"M12 3a9 9 0 1 0 9 9h-9z M12 3v9\",percent:\"M19 5 5 19 M9 6.5a2.5 2.5 0 1 1-5 0a2.5 2.5 0 1 1 5 0z M20 17.5a2.5 2.5 0 1 1-5 0a2.5 2.5 0 1 1 5 0z\",people:\"M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2 M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M22 21v-2a4 4 0 0 0-3-3.87 M17 3.13A4 4 0 0 1 17 11\",pin:\"M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z M12 12a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z\",shield:\"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z\",table:\"M3 3h18v18H3z M3 9h18 M3 15h18 M12 3v18\",box:\"M21 8V16l-9 5-9-5V8l9-5 9 5z M3 8l9 5 9-5 M12 13v8\"},o={\"shield-m\":{viewBox:\"0 -960 960 960\",filled:!0},\"pin-m\":{viewBox:\"0 -960 960 960\",filled:!0}};function n(e,a,t){const l=s[e]||s.chart,i=o[e];return`<svg width=\"${a}\" height=\"${a}\" viewBox=\"${i?i.viewBox:\"0 0 24 24\"}\" ${i&&i.filled?`fill=\"${t}\" stroke=\"none\"`:`fill=\"none\" stroke=\"${t}\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"`} preserveAspectRatio=\"xMidYMid meet\">${l.split(\" M\").map((e,a)=>0===a?e:\"M\"+e).map(e=>`<path d=\"${e}\"/>`).join(\"\")}</svg>`}const r=8,d=10,c=18,u=10,p=12,m=9,v=10,y=10,h=9,g=15,b=11,f=12,C=13,N=16,M=30,S=\"600\",w=\"600\",z=\"600\",x=16,T=26,D=20,F=\"#EDEBE9\",E=e=>Math.round(1*e)+\"px\",j=e=>Math.round(1*e);class k{root;settings;settingsService;constructor(e){this.settingsService=new l.O,this.root=e.element,this.root.style.width=\"100%\",this.root.style.height=\"100%\",this.root.style.overflow=\"hidden\",this.root.style.fontFamily=\"'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif\"}update(e){try{this.render(e)}catch(e){this.root.innerHTML=\"\";const a=document.createElement(\"pre\");a.style.whiteSpace=\"pre-wrap\",a.style.color=\"#B00020\",a.style.fontSize=\"10px\",a.style.margin=\"4px\",a.textContent=\"panel error: \"+(e&&e.stack?e.stack:String(e)),this.root.appendChild(a)}}render(e){const a=e.dataViews&&e.dataViews[0];this.settings=this.settingsService.populateFormattingSettingsModel(i.S,a);const t=this.settings,l=t.panelCard.mode.value.value||\"card\",s=t.panelCard.fill.value.value,o=t.panelCard.radius.value,n=t.panelCard.borderShow.value,r=t.panelCard.borderColor.value.value,d=document.createElement(\"div\");d.style.boxSizing=\"border-box\",d.style.width=\"100%\",d.style.height=\"100%\",d.style.background=\"backboard\"===l||s?s:\"#FFFFFF\",d.style.borderRadius=o+\"px\",d.style.border=n&&\"backboard\"!==l?`1px solid ${r}`:\"none\",d.style.display=\"flex\",d.style.flexDirection=\"column\",d.style.overflow=\"hidden\",\"backboard\"===l||(\"header\"===l?d.appendChild(this.buildHeader(t)):\"panel\"===l?d.appendChild(this.buildPanelHeader(t)):\"sidebar\"===l?d.appendChild(this.buildSidebar(t)):(d.style.padding=`${E(u)} ${E(c)} ${E(p)}`,d.appendChild(this.buildCard(t,a)))),this.root.innerHTML=\"\",this.root.appendChild(d)}buildSidebar(e){const a=document.createElement(\"div\");if(a.style.display=\"flex\",a.style.flexDirection=\"column\",a.style.alignItems=\"center\",a.style.height=\"100%\",a.style.paddingTop=E(g),e.iconCard.show.value){const t=document.createElement(\"div\");t.innerHTML=n(e.iconCard.iconName.value.value,j(e.iconCard.size.value),e.iconCard.color.value.value),t.style.display=\"flex\",a.appendChild(t)}return a}buildHeader(e){const a=document.createElement(\"div\");if(a.style.display=\"flex\",a.style.alignItems=\"center\",a.style.gap=E(d),a.style.height=\"100%\",a.style.padding=`0 ${E(g)}`,e.iconCard.show.value){const t=document.createElement(\"div\");t.innerHTML=n(e.iconCard.iconName.value.value,j(D),e.iconCard.color.value.value),t.style.display=\"flex\",a.appendChild(t)}return a.appendChild(this.titleBlock(e,N)),a}buildPanelHeader(e){const a=document.createElement(\"div\");if(a.style.boxSizing=\"border-box\",a.style.display=\"flex\",a.style.alignItems=\"center\",a.style.gap=E(r),a.style.padding=`${E(m)} ${E(y)} ${E(h)} ${E(v)}`,a.style.borderBottom=`1px solid ${F}`,e.iconCard.show.value){const t=document.createElement(\"div\");t.innerHTML=n(e.iconCard.iconName.value.value,j(x),e.iconCard.color.value.value),t.style.display=\"flex\",a.appendChild(t)}return a.appendChild(this.titleBlock(e,C)),a}titleBlock(e,a){const t=document.createElement(\"div\");t.style.display=\"flex\",t.style.flexDirection=\"column\",t.style.justifyContent=\"center\";const l=document.createElement(\"div\");if(l.textContent=e.titleCard.text.value||\"\",l.style.fontFamily=\"'Segoe UI Semibold', 'Segoe UI', sans-serif\",l.style.fontWeight=w,l.style.fontSize=E(a),l.style.color=e.titleCard.color.value.value,l.style.lineHeight=\"1.25\",t.appendChild(l),e.titleCard.subtitle.value){const a=document.createElement(\"div\");a.textContent=e.titleCard.subtitle.value,a.style.fontSize=E(b),a.style.fontWeight=\"400\",a.style.color=e.titleCard.subtitleColor.value.value,a.style.lineHeight=\"1.3\",a.style.marginTop=\"1px\",t.appendChild(a)}return t}buildCard(e,a){const t=document.createElement(\"div\");t.style.display=\"flex\",t.style.flexDirection=\"column\",t.style.height=\"100%\";const l=document.createElement(\"div\");if(l.style.display=\"flex\",l.style.alignItems=\"center\",l.style.gap=E(r),e.iconCard.show.value){const a=document.createElement(\"div\");a.innerHTML=n(e.iconCard.iconName.value.value,j(e.iconCard.size.value||T),e.iconCard.color.value.value),a.style.display=\"flex\",l.appendChild(a)}const i=document.createElement(\"div\");i.textContent=e.valueCard.label.value||\"\",i.style.fontSize=E(f),i.style.fontWeight=S,i.style.color=e.valueCard.labelColor.value.value,l.appendChild(i);const s=function(e){const a={value:null,comparison:null,format:\"\"},t=e&&e.categorical&&e.categorical.values;if(!t)return a;for(const e of t){const t=e.source.roles||{},l=e.values&&e.values.length?Number(e.values[e.values.length-1]):null;t.value?(a.value=l,a.format=e.source.format||\"\"):t.comparison&&(a.comparison=l)}return a}(a);e.pillCard.show.value&&null!=s.value&&null!=s.comparison&&0!==s.comparison&&l.appendChild(this.pill(s.value,s.comparison,e)),t.appendChild(l);const o=document.createElement(\"div\");o.style.flex=\"1\",o.style.display=\"flex\",o.style.alignItems=\"center\",o.style.justifyContent=\"center\",o.style.paddingTop=\"22px\";const d=document.createElement(\"div\");return d.style.textAlign=\"center\",d.textContent=this.fmt(s.value,s.format,e.valueCard.precision.value),d.style.fontFamily=\"'Segoe UI Semibold', 'Segoe UI', sans-serif\",d.style.fontWeight=z,d.style.fontSize=E(e.valueCard.fontSize.value||M),d.style.color=e.valueCard.color.value.value,d.style.lineHeight=\"1.1\",o.appendChild(d),t.appendChild(o),t}pill(e,a,t){const l=(e-a)/Math.abs(a)*100;let i=l>=0;t.pillCard.invert.value&&(i=!i);const s=i?t.pillCard.goodColor.value.value:t.pillCard.badColor.value.value,o=document.createElement(\"div\");o.style.marginLeft=\"auto\",o.style.display=\"inline-flex\",o.style.alignItems=\"center\",o.style.gap=E(3),o.style.padding=`${E(2)} ${E(8)}`,o.style.borderRadius=\"999px\",o.style.fontSize=E(f),o.style.fontWeight=\"600\",o.style.color=s,o.style.background=this.tint(s,.12);const n=l>=0?\"↗\":\"↘\";return o.textContent=`${n} ${l>=0?\"+\":\"\"}${l.toFixed(1)}%`,o}fmt(e,a,t){if(null==e)return\"\";const l=/%/.test(a),i=l?100*e:e,s=new Intl.NumberFormat(\"en-US\",{minimumFractionDigits:t,maximumFractionDigits:t}).format(i);return(a.startsWith(\"+\")&&i>0?\"+\":\"\")+(l?s+\"%\":s)+(/×/.test(a)?\"×\":\"\")}tint(e,a){const t=e.replace(\"#\",\"\");return`rgba(${parseInt(t.substring(0,2),16)},${parseInt(t.substring(2,4),16)},${parseInt(t.substring(4,6),16)},${a})`}getFormattingModel(){return this.settingsService.buildFormattingModel(this.settings)}}}};const a={};function t(l){const i=a[l];if(void 0!==i)return i.exports;const s=a[l]={exports:{}};return e[l](s,s.exports,t),s.exports}t.d=(e,a)=>{if(Array.isArray(a))for(var l=0;l<a.length;){var i=a[l++],s=a[l++],o=0===s?{enumerable:!0,value:a[l++]}:{enumerable:!0,get:s};t.o(e,i)||Object.defineProperty(e,i,o)}else for(var i in a)t.o(a,i)&&!t.o(e,i)&&Object.defineProperty(e,i,{enumerable:!0,get:a[i]})},t.o=(e,a)=>Object.prototype.hasOwnProperty.call(e,a),t.r=e=>{Object.defineProperty(e,Symbol.toStringTag,{value:\"Module\"}),Object.defineProperty(e,\"__esModule\",{value:!0})};let l={};(()=>{t.r(l);var e=t(789),a=window.powerbi,i={name:\"customLayoutContainerGUID2026\",displayName:\"Clean Transparent Container\",class:\"Visual\",apiVersion:\"5.3.0\",create:a=>{if(e.b)return new e.b(a);throw\"Visual instance not found\"},createModalDialog:(e,a,t)=>{const l=globalThis.dialogRegistry;e in l&&new l[e](a,t)},custom:!0};void 0!==a&&(a.visuals=a.visuals||{},a.visuals.plugins=a.visuals.plugins||{},a.visuals.plugins.customLayoutContainerGUID2026=i);const s=i;t.d(l,[\"default\",0,s])})(),customLayoutContainerGUID2026=l})();",
+    "css": "/* panel visual: styling is inline per-mode in visual.ts */\n\n",
+    "iconBase64": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2RpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpBOEJGMzkxN0NBRDNFMDExQTcxQ0JFODI3ODBCQUE5RSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo3NEY1QjA1NUQ0OTAxMUUwQTgxREI2NjMxMkNEMUNEMyIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo3NEY1QjA1NEQ0OTAxMUUwQTgxREI2NjMxMkNEMUNEMyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IFdpbmRvd3MiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5Mjk5RDU1ODBGRDRFMDExQTcxQ0JFODI3ODBCQUE5RSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpBOEJGMzkxN0NBRDNFMDExQTcxQ0JFODI3ODBCQUE5RSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PpDoNX0AAAI3SURBVHjarJRLSFVRFIY9t7SiRDGLoEEPCRJRaCSYkxCiFCXCF+LIMExQLkilgumgwkbdBuWDRC2EomhURCOjgagkXEgKLUKhidobM6H0+i34rxyPnuvEA5/rXPda/1l7739vJxKJxG3ls93+hEKhTILxJhgMftmsiPxdhHw4CfepeR8dCyjWwwB0kZy3iVgCoQ2ewnmXxhrBD7Cgr/ZQVA17fDRPw2UYhzK6G99IsBse6/0QNME+H8FT4EA/YiPqOgA1q4IMzBNuw6iKjkCpj+Av+AdnEEmD3bxfhzvuDk30HaEaLsEkXCO53rN+Bwg5qsvTuj/TjGYtx9nINhRmEx7AYWiFW7AXOuEcbPOUvIZ2mnrl+PkQUbNEh4QHNKUSDdsSBWEOlmxTEfvs26FL9Khe211if6Acgee+xo7xzMgBxfq9qPe3fgWBGN2lEnqtG9nExM7CV3jp3bDos2bKJB0nHFRxAxRpA/5CIXyHh5ABv6GZqd9dJ6iz2SjbxMMypGhJFtTlNzu3kK7xgDxpove8U66FK2A+s6nul5gVVMEL+Ak7lG/T+g9JcIOGar2CRUoogxMwpP/bLTJMB9bRhDbkk5bBUU0y3ES0xS04CBfN9RSHiY90vJK0BHaSzG9h2eejS3RJeVfdtrGzuGyd8CX7Yq6ExuCH63jaVMPkFOv6OibB6DKs2+VEQp+WYBoqERn2sVWWRNN0YurIfeL14U6YkpkLYCSG6e0yqdCxvKBLIm5FgAEAV0nKuwMYRUsAAAAASUVORK5CYII="
+  },
+  "visualEntryPoint": "",
+  "externalJS": [],
+  "assets": {
+    "icon": "assets/icon.png"
+  }
+}

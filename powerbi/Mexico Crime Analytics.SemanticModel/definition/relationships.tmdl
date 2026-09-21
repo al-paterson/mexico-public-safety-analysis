@@ -1,0 +1,12 @@
+relationship 6b5a8cec-01c2-593a-b509-b414a3d40beb
+	fromColumn: fact_delitos.fecha_key
+	toColumn: dim_fecha.fecha_key
+
+relationship b7eb24a3-42f6-5f5d-8214-f7cddbfc97f3
+	fromColumn: fact_delitos.entidad_key
+	toColumn: dim_entidad.entidad_key
+
+relationship dbf9248e-6a10-578e-86dd-69b7a9c369fd
+	fromColumn: fact_delitos.delito_key
+	toColumn: dim_delito.delito_key
+

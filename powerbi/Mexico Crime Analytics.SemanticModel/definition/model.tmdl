@@ -1,0 +1,24 @@
+model Model
+	culture: es-MX
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-MX
+	maxParallelismPerRefresh: 1
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["fact_delitos","dim_fecha","dim_entidad","dim_delito","dim_poblacion","tabla_estados","DataFolder"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table fact_delitos
+ref table dim_fecha
+ref table dim_entidad
+ref table dim_delito
+ref table dim_poblacion
+ref table tabla_estados
+
+ref cultureInfo es-MX
+

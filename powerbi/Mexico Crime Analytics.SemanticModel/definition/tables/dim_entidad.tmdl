@@ -1,0 +1,92 @@
+table dim_entidad
+	lineageTag: 8b701bc4-bed8-56a1-8063-4c28af4e9416
+
+	column entidad_key
+		dataType: int64
+		isHidden
+		lineageTag: 3aff3bab-992f-523d-8d3c-24c6ef8f75a7
+		summarizeBy: none
+		sourceColumn: entidad_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Entidad
+		dataType: string
+		lineageTag: 70bd4f69-0692-5612-bf54-bbca33e4e077
+		dataCategory: StateOrProvince
+		summarizeBy: none
+		sourceColumn: entidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column clave_ent_padded
+		dataType: string
+		isHidden
+		lineageTag: 276f18d2-dd71-5d46-ac05-a1c0a3a33d9f
+		summarizeBy: none
+		sourceColumn: clave_ent_padded
+
+		annotation SummarizationSetBy = Automatic
+
+	column Pais = "Mexico"
+		dataType: string
+		lineageTag: a1b2c3d4-0000-4000-8000-000000000002
+		dataCategory: Country
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Abreviatura estandar del estado (clave INEGI), para etiquetas cortas.
+	column Abrev =
+			SWITCH(
+			    dim_entidad[entidad_key],
+			    1, "AGS",
+			    2, "BC",
+			    3, "BCS",
+			    4, "CAMP",
+			    5, "COAH",
+			    6, "COL",
+			    7, "CHIS",
+			    8, "CHIH",
+			    9, "CDMX",
+			    10, "DGO",
+			    11, "GTO",
+			    12, "GRO",
+			    13, "HGO",
+			    14, "JAL",
+			    15, "MEX",
+			    16, "MICH",
+			    17, "MOR",
+			    18, "NAY",
+			    19, "NL",
+			    20, "OAX",
+			    21, "PUE",
+			    22, "QRO",
+			    23, "QROO",
+			    24, "SLP",
+			    25, "SIN",
+			    26, "SON",
+			    27, "TAB",
+			    28, "TAMPS",
+			    29, "TLAX",
+			    30, "VER",
+			    31, "YUC",
+			    32, "ZAC",
+			    BLANK()
+			)
+		dataType: string
+		lineageTag: 67a63525-e626-4818-b690-5a3935e7df8e
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_entidad = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_entidad.parquet"))
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+

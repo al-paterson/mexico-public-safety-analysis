@@ -1,0 +1,28 @@
+/// Copia de dim_entidad SIN relacion: filas de la tabla de detalle de la pagina 2, para que liste los 32 estados y aun asi "vea" el estado elegido en el slicer.
+table tabla_estados
+	lineageTag: ac6d4757-284e-4106-8734-2e44ef341bbf
+
+	column entidad_key
+		dataType: int64
+		isHidden
+		lineageTag: f295a09f-3fee-4867-a6d6-b679d567d9ae
+		summarizeBy: none
+		sourceColumn: entidad_key
+
+	column Entidad
+		dataType: string
+		lineageTag: 7aca8a37-b976-4dfb-8441-fe063eae46bd
+		summarizeBy: none
+		sourceColumn: entidad
+
+	partition tabla_estados = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_entidad.parquet")),
+				    Cols = Table.SelectColumns(Source, {"entidad_key", "entidad"})
+				in
+				    Cols
+
+	annotation PBI_ResultType = Table
+

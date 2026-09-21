@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Mexico Crime Analytics"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "09d6665f-b292-43e6-8939-f0361a435f7c"
+  }
+}

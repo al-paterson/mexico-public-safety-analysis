@@ -1,0 +1,99 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 334.1957458375764,
+            "y": 258.14756090942262
+          },
+          "nodeIndex": "fact_delitos",
+          "nodeLineageTag": "0527f4d8-d037-5e5e-a536-c4e8d02987f7",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 439.69571650466861,
+            "y": 608.34889390930084
+          },
+          "nodeIndex": "dim_delito",
+          "nodeLineageTag": "85e65c96-b56d-5cc5-92f2-c159c1fb932f",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 322.83115243061241,
+            "y": -50
+          },
+          "nodeIndex": "dim_entidad",
+          "nodeLineageTag": "8b701bc4-bed8-56a1-8063-4c28af4e9416",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 178.82698960127254
+          },
+          "nodeIndex": "dim_fecha",
+          "nodeLineageTag": "ae02c9c9-1140-566d-881a-6f3625ce3a85",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 673.69571650466855,
+            "y": 391.17444695465053
+          },
+          "nodeIndex": "dim_poblacion",
+          "nodeLineageTag": "5f482c23-0442-5292-88c9-762cedbe9668",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 907.69571650466855,
+            "y": 415.17444695465042
+          },
+          "nodeIndex": "tabla_estados",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

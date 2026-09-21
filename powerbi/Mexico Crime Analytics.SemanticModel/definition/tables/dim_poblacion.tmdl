@@ -1,0 +1,51 @@
+/// Poblacion por estado y ano (CONAPO). Sin relacion a proposito: la llave es estado + ano, y una relacion solo une una columna; la medida 'Poblacion total' la conecta con TREATAS.
+table dim_poblacion
+	lineageTag: 5f482c23-0442-5292-88c9-762cedbe9668
+
+	column clave_ent
+		dataType: int64
+		isHidden
+		lineageTag: f401f2cf-0f20-5014-809d-ec99b5ab155b
+		summarizeBy: none
+		sourceColumn: clave_ent
+
+		annotation SummarizationSetBy = Automatic
+
+	column anio
+		dataType: int64
+		isHidden
+		lineageTag: 051ede9b-d4d1-50a7-ab34-c4aef6f65ce1
+		summarizeBy: none
+		sourceColumn: anio
+
+		annotation SummarizationSetBy = Automatic
+
+	column entidad_conapo
+		dataType: string
+		isHidden
+		lineageTag: bf8f540d-34d2-5d36-8488-1046eaf1eeac
+		summarizeBy: none
+		sourceColumn: entidad_conapo
+
+		annotation SummarizationSetBy = Automatic
+
+	column poblacion
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: c69f4bfa-b828-5d10-8a61-2894cafd23e7
+		summarizeBy: none
+		sourceColumn: poblacion
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_poblacion = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_poblacion.parquet"))
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+

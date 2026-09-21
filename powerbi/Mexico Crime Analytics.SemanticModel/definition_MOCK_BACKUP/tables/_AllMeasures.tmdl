@@ -1,0 +1,20 @@
+table _AllMeasures
+	lineageTag: 88327966-1319-4003-9b12-61d0b7f927a6
+
+	column Column1
+		isHidden
+		lineageTag: c6f8b47b-207c-4f21-b570-af81b93e9f66
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Column1]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _AllMeasures = calculated
+		mode: import
+		source = DATATABLE("Column1", STRING, {{"x"}})
+
+	annotation PBI_ResultType = Table
+
